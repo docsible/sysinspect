@@ -1,0 +1,47 @@
+name: Test Docsible PR and Generate Documentation
+
+on:
+  workflow_dispatch:
+    inputs:
+      docsible_pr_number:
+        description: "Pull request number on docsible/docsible"
+        required: true
+        type: number
+
+permissions:
+  contents: write
+
+jobs:
+  test_docsible_pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout current repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+
+      - name: Install Docsible from PR
+        run: |
+          PR_NUMBER=${{ github.event.inputs.docsible_pr_number }}
+          pip install git+https://github.com/docsible/docsible.git@refs/pull/${PR_NUMBER}/head
+
+      - name: Generate documentation for role
+        run: |
+          docsible -r ./ -g -o README.md -com -nob
+
+      - name: Check for documentation changes
+        env:
+          TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          if git diff --cached --exit-code; then
+            echo "No changes to commit";
+          else
+            git commit -m "Tested Docsible PR #${{ github.event.inputs.docsible_pr_number }}: automated doc update"
+            git push "https://${TOKEN}@github.com/${{ github.repository }}.git" HEAD:main
