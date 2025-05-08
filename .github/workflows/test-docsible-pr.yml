@@ -42,6 +42,8 @@ jobs:
           git add .
           if git diff --cached --exit-code; then
             echo "No changes to commit";
-          else
+          elif [ -n "${TOKEN}" ]; then
             git commit -m "Tested Docsible PR #${{ github.event.inputs.docsible_pr_number }}: automated doc update"
             git push "https://${TOKEN}@github.com/${{ github.repository }}.git" HEAD:main
+          else
+            echo "Skipping push: TOKEN is not set"
