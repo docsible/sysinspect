@@ -47,3 +47,4 @@ jobs:
             git push "https://${TOKEN}@github.com/${{ github.repository }}.git" HEAD:main
           else
             echo "Skipping push: TOKEN is not set"
+          fi
