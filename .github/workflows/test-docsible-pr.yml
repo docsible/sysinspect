@@ -4,15 +4,20 @@ on:
   workflow_dispatch:
     inputs:
       docsible_pr_number:
-        description: "Pull request number on docsible/docsible"
-        required: true
+        description: "Optional: Pull request number on docsible/docsible"
+        required: false
         type: number
+      use_latest:
+        description: "Use latest main branch from docsible/docsible instead of a PR?"
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
 
 jobs:
-  test_docsible_pr:
+  test_docsible:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,10 +29,18 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install Docsible from PR
+      - name: Install Docsible (PR or latest)
         run: |
-          PR_NUMBER=${{ github.event.inputs.docsible_pr_number }}
-          pip install git+https://github.com/docsible/docsible.git@refs/pull/${PR_NUMBER}/head
+          if [[ "${{ github.event.inputs.use_latest }}" == "true" ]]; then
+            echo "📦 Installing latest Docsible from main branch"
+            pip install git+https://github.com/docsible/docsible.git@main
+          elif [[ -n "${{ github.event.inputs.docsible_pr_number }}" ]]; then
+            echo "📦 Installing Docsible from PR #${{ github.event.inputs.docsible_pr_number }}"
+            pip install git+https://github.com/docsible/docsible.git@refs/pull/${{ github.event.inputs.docsible_pr_number }}/head
+          else
+            echo "❌ Please provide either a PR number or enable 'use_latest'."
+            exit 1
+          fi
 
       - name: Generate documentation for role
         run: |
@@ -41,9 +54,15 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add .
           if git diff --cached --exit-code; then
-            echo "No changes to commit";
+            echo "No changes to commit"
           elif [ -n "${TOKEN}" ]; then
-            git commit -m "Tested Docsible PR #${{ github.event.inputs.docsible_pr_number }}: automated doc update"
+            COMMIT_MSG="Automated doc update from Docsible "
+            if [[ "${{ github.event.inputs.use_latest }}" == "true" ]]; then
+              COMMIT_MSG+="(latest)"
+            else
+              COMMIT_MSG+="PR #${{ github.event.inputs.docsible_pr_number }}"
+            fi
+            git commit -m "${COMMIT_MSG}"
             git push "https://${TOKEN}@github.com/${{ github.repository }}.git" HEAD:main
           else
             echo "Skipping push: TOKEN is not set"
