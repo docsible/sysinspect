@@ -1,0 +1,62 @@
+#SPDX-License-Identifier: MIT-0
+---
+argument_specs:
+  main:
+    short_description: >
+      Collect system metrics (CPU, memory, disk, OS, network) and generate a structured JSON report with optional webhook integration.
+    options:
+      sysinspect_debug_mode:
+        type: bool
+        required: false
+        default: true
+        description: >
+          If true, enables debug output including the final JSON report printed to the terminal.
+
+      sysinspect_report_output_path:
+        type: str
+        required: false
+        default: "/tmp/system_report.json"
+        description: >
+          Path where the final JSON report will be written on the target host.
+
+      sysinspect_report_webhook_url:
+        type: str
+        required: false
+        default: ""
+        description: >
+          Optional URL of a webhook endpoint to which the report will be POSTed.
+
+      sysinspect_collect_hardware:
+        type: bool
+        required: false
+        default: true
+        description: >
+          Whether to collect CPU, memory, and disk metrics.
+
+      sysinspect_collect_os:
+        type: bool
+        required: false
+        default: true
+        description: >
+          Whether to collect OS version, kernel, and system uptime.
+
+      sysinspect_collect_network:
+        type: bool
+        required: false
+        default: true
+        description: >
+          Whether to collect IP address and basic network diagnostics.
+
+      sysinspect_cpu_alert_threshold:
+        type: int
+        required: false
+        default: 90
+        description: >
+          CPU usage percentage above which a warning alert is triggered.
+
+      sysinspect_memory_alert_threshold:
+        type: int
+        required: false
+        default: 90
+        description: >
+          Memory usage percentage above which a warning alert is triggered.

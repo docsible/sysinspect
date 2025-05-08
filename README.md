@@ -1,0 +1,334 @@
+<!-- DOCSIBLE START -->
+
+# 📃 Role overview
+
+## sysinspect
+
+
+
+Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, and network). Designed for diagnostics, compliance reporting, monitoring integration, or automated system audits.
+
+
+
+| Field                | Value           |
+|--------------------- |-----------------|
+| Readme update        | 08/05/2025 |
+
+
+
+
+<details>
+<summary><b>🧩 Argument Specifications in meta/argument_specs</b></summary>
+
+#### Key: main
+**Description**: Collect system metrics (CPU, memory, disk, OS, network) and generate a structured JSON report with optional webhook integration.
+
+
+
+  - **sysinspect_debug_mode**
+    - **Required**: False
+    - **Type**: bool
+    - **Default**: True
+    - **Description**: If true, enables debug output including the final JSON report printed to the terminal.
+
+  
+  
+  
+
+  - **sysinspect_report_output_path**
+    - **Required**: False
+    - **Type**: str
+    - **Default**: /tmp/system_report.json
+    - **Description**: Path where the final JSON report will be written on the target host.
+
+  
+  
+  
+
+  - **sysinspect_report_webhook_url**
+    - **Required**: False
+    - **Type**: str
+    - **Default**: 
+    - **Description**: Optional URL of a webhook endpoint to which the report will be POSTed.
+
+  
+  
+  
+
+  - **sysinspect_collect_hardware**
+    - **Required**: False
+    - **Type**: bool
+    - **Default**: True
+    - **Description**: Whether to collect CPU, memory, and disk metrics.
+
+  
+  
+  
+
+  - **sysinspect_collect_os**
+    - **Required**: False
+    - **Type**: bool
+    - **Default**: True
+    - **Description**: Whether to collect OS version, kernel, and system uptime.
+
+  
+  
+  
+
+  - **sysinspect_collect_network**
+    - **Required**: False
+    - **Type**: bool
+    - **Default**: True
+    - **Description**: Whether to collect IP address and basic network diagnostics.
+
+  
+  
+  
+
+  - **sysinspect_cpu_alert_threshold**
+    - **Required**: False
+    - **Type**: int
+    - **Default**: 90
+    - **Description**: CPU usage percentage above which a warning alert is triggered.
+
+  
+  
+  
+
+  - **sysinspect_memory_alert_threshold**
+    - **Required**: False
+    - **Type**: int
+    - **Default**: 90
+    - **Description**: Memory usage percentage above which a warning alert is triggered.
+
+  
+  
+  
+
+
+
+</details>
+
+
+
+
+### Defaults
+
+**These are static variables with lower priority**
+
+#### File: defaults/main.yml
+
+| Var          | Type         | Value       |Required    | Title       |
+|--------------|--------------|-------------|-------------|-------------|
+| [sysinspect_debug_mode](defaults/main.yml#L10)   | bool   | `True` |    false  |  Enable debug mode for detailed output |
+| [sysinspect_report_output_path](defaults/main.yml#L17)   | str   | `/tmp/system_report.json` |    true  |  Output path for system report |
+| [sysinspect_report_webhook_url](defaults/main.yml#L23)   | str   |  |    false  |  Send report to webhook |
+| [sysinspect_collect_hardware](defaults/main.yml#L29)   | bool   | `True` |    true  |  Collect CPU, memory, and disk usage |
+| [sysinspect_collect_os](defaults/main.yml#L35)   | bool   | `True` |    true  |  Collect OS, kernel, and uptime info |
+| [sysinspect_collect_network](defaults/main.yml#L40)   | bool   | `True` |    true  |  Collect network information (IP addresses) |
+| [sysinspect_cpu_alert_threshold](defaults/main.yml#L45)   | int   | `90` |    false  |  CPU usage alert threshold |
+| [sysinspect_memory_alert_threshold](defaults/main.yml#L50)   | int   | `90` |    false  |  Memory usage alert threshold |
+<details>
+<summary><b>🖇️ Full descriptions for vars in defaults/main.yml</b></summary>
+<br>
+<b>sysinspect_debug_mode:</b> If true, the role will display additional debug information at runtime,<br>
+including the final assembled JSON report before writing or sending it.<br>
+<br>
+<b>sysinspect_report_output_path:</b> Path where the final JSON report will be written.
+<br>
+<b>sysinspect_report_webhook_url:</b> URL of the HTTP endpoint that will receive the report.
+<br>
+<b>sysinspect_collect_hardware:</b> Enable or disable hardware metric collection.
+<br>
+<b>sysinspect_collect_os:</b> Enable or disable operating system info collection.
+<br>
+<b>sysinspect_collect_network:</b> Enable or disable network diagnostics.
+<br>
+<b>sysinspect_cpu_alert_threshold:</b> If CPU usage exceeds this percentage, it will trigger an alert.
+<br>
+<b>sysinspect_memory_alert_threshold:</b> If memory usage exceeds this percentage, it will trigger an alert.
+<br>
+<br>
+</details>
+
+
+### Vars
+
+**These are variables with higher priority**
+#### File: vars/main.yml
+
+| Var          | Type         | Value       |Required    | Title       |
+|--------------|--------------|-------------|-------------|-------------|
+| [sysinspect_suite_name](vars/main.yml#L8)   | str   | `System Inspector v1.0` |    true  |  Name of the diagnostic suite |
+| [sysinspect_phases](vars/main.yml#L15)   | list   | `[{'id': 'hardware_check', 'label': 'Hardware Metrics Collection', 'description': 'Collects CPU, memory, and disk usage statistics.'}, {'id': 'os_info_check', 'label': 'Operating System Inspection', 'description': 'Retrieves OS name, kernel version, and system uptime.'}, {'id': 'network_check', 'label': 'Network Interface Summary', 'description': 'Gathers IP addresses and basic networking diagnostics.'}, {'id': 'threshold_alerts', 'label': 'Resource Threshold Validation', 'description': 'Checks if resource usage exceeds critical thresholds and logs alerts.'}, {'id': 'json_output', 'label': 'Structured JSON Output', 'description': 'Formats collected data into a structured JSON report.'}, {'id': 'webhook_post', 'label': 'Webhook Transmission', 'description': 'Sends the JSON report to an external system if a webhook URL is defined.'}]` |    true  |  Phases of system inspection |
+| [sysinspect_tool_name](vars/main.yml#L45)   | str   | `InspectorCoreShell` |    true  |  Internal name of the diagnostic tool |
+<details>
+<summary><b>🖇️ Full Descriptions for vars in vars/main.yml</b></summary>
+<br>
+<b>sysinspect_suite_name:</b> Human-readable name of the system inspection suite. Used in logging and reporting.
+<br>
+<b>sysinspect_phases:</b> List of phases executed by this role. Each phase corresponds to a logical block of diagnostics.<br>
+This structure is used to organize reports and debug output for better traceability.<br>
+<br>
+<b>sysinspect_tool_name:</b> Technical identifier for this inspection system.<br>
+Used in output headers, reports, and external integrations to track tool identity.<br>
+<br>
+<br>
+</details>
+
+
+### Tasks
+
+
+#### File: tasks/collect_metric.yml
+
+| Name | Module | Has Conditions |
+| ---- | ------ | --------- |
+| [Run metric shell command for {{ metric_name }}](tasks/collect_metric.yml#L5) | ansible.builtin.shell | True |
+| [Transfer result to dynamic register var](tasks/collect_metric.yml#L15) | ansible.builtin.set_fact | True |
+
+#### File: tasks/main.yml
+
+| Name | Module | Has Conditions |
+| ---- | ------ | --------- |
+| [Begin system diagnostics](tasks/main.yml#L5) | ansible.builtin.debug | False |
+| [Initialize data dictionary](tasks/main.yml#L9) | ansible.builtin.set_fact | False |
+| [Collect hardware metrics](tasks/main.yml#L14) | block | False |
+| [Collect CPU usage](tasks/main.yml#L17) | ansible.builtin.include_tasks | False |
+| [Collect memory usage](tasks/main.yml#L26) | ansible.builtin.include_tasks | False |
+| [Collect disk usage](tasks/main.yml#L35) | ansible.builtin.import_tasks | False |
+| [Set hardware facts](tasks/main.yml#L43) | ansible.builtin.set_fact | True |
+| [Collect OS metrics](tasks/main.yml#L60) | block | False |
+| [Get OS version](tasks/main.yml#L62) | ansible.builtin.import_tasks | False |
+| [Get kernel version](tasks/main.yml#L70) | ansible.builtin.include_tasks | False |
+| [Get uptime](tasks/main.yml#L78) | ansible.builtin.include_tasks | False |
+| [Set OS facts](tasks/main.yml#L86) | ansible.builtin.set_fact | True |
+| [Collect network info](tasks/main.yml#L102) | block | False |
+| [Get main IP address](tasks/main.yml#L104) | ansible.builtin.include_tasks | False |
+| [Set network fact](tasks/main.yml#L112) | ansible.builtin.set_fact | True |
+| [Check threshold alerts](tasks/main.yml#L123) | block | False |
+| [Alert on high CPU](tasks/main.yml#L125) | ansible.builtin.debug | True |
+| [Alert on high memory](tasks/main.yml#L130) | ansible.builtin.debug | True |
+| [Append role configuration to report data](tasks/main.yml#L141) | ansible.builtin.set_fact | False |
+| [Show final system report JSON (debug mode)](tasks/main.yml#L157) | ansible.builtin.debug | True |
+| [Write system report to JSON file](tasks/main.yml#L163) | ansible.builtin.copy | False |
+| [Send report to webhook](tasks/main.yml#L170) | ansible.builtin.uri | True |
+
+
+## Task Flow Graphs
+
+
+
+### Graph for main.yml
+
+```mermaid
+flowchart TD
+Start
+classDef block stroke:#3498db,stroke-width:2px;
+classDef task stroke:#4b76bb,stroke-width:2px;
+classDef includeTasks stroke:#16a085,stroke-width:2px;
+classDef importTasks stroke:#34495e,stroke-width:2px;
+classDef includeRole stroke:#2980b9,stroke-width:2px;
+classDef importRole stroke:#699ba7,stroke-width:2px;
+classDef includeVars stroke:#8e44ad,stroke-width:2px;
+classDef rescue stroke:#665352,stroke-width:2px;
+
+  Start-->|Task| Begin_system_diagnostics0[begin system diagnostics]:::task
+  Begin_system_diagnostics0-->|Task| Initialize_data_dictionary1[initialize data dictionary]:::task
+  Initialize_data_dictionary1-->|Block Start| Collect_hardware_metrics2_block_start_0[[collect hardware metrics]]:::block
+  Collect_hardware_metrics2_block_start_0-->|Include task| Collect_CPU_usage_collect_metric_yml_0[collect cpu usage<br>include_task: collect metric yml]:::includeTasks
+  Collect_CPU_usage_collect_metric_yml_0-->|Include task| Collect_memory_usage_collect_metric_yml_1[collect memory usage<br>include_task: collect metric yml]:::includeTasks
+  Collect_memory_usage_collect_metric_yml_1-->|Import task| Collect_disk_usage_collect_metric_yml_2[/collect disk usage<br>import_task: collect metric yml/]:::importTasks
+  Collect_disk_usage_collect_metric_yml_2-->|Task| Set_hardware_facts3[set hardware facts<br>When: **sysinspect collect hardware**]:::task
+  Set_hardware_facts3-.->|End of Block| Collect_hardware_metrics2_block_start_0
+  Set_hardware_facts3-->|Rescue Start| Collect_hardware_metrics2_rescue_start_0[collect hardware metrics]:::rescue
+  Collect_hardware_metrics2_rescue_start_0-->|Task| Log_hardware_collection_failure0[log hardware collection failure]:::task
+  Log_hardware_collection_failure0-.->|End of Rescue Block| Collect_hardware_metrics2_block_start_0
+  Log_hardware_collection_failure0-->|Block Start| Collect_OS_metrics3_block_start_0[[collect os metrics]]:::block
+  Collect_OS_metrics3_block_start_0-->|Import task| Get_OS_version_collect_metric_yml_0[/get os version<br>import_task: collect metric yml/]:::importTasks
+  Get_OS_version_collect_metric_yml_0-->|Include task| Get_kernel_version_collect_metric_yml_1[get kernel version<br>include_task: collect metric yml]:::includeTasks
+  Get_kernel_version_collect_metric_yml_1-->|Include task| Get_uptime_collect_metric_yml_2[get uptime<br>include_task: collect metric yml]:::includeTasks
+  Get_uptime_collect_metric_yml_2-->|Task| Set_OS_facts3[set os facts<br>When: **sysinspect collect os**]:::task
+  Set_OS_facts3-.->|End of Block| Collect_OS_metrics3_block_start_0
+  Set_OS_facts3-->|Rescue Start| Collect_OS_metrics3_rescue_start_0[collect os metrics]:::rescue
+  Collect_OS_metrics3_rescue_start_0-->|Task| Log_OS_info_collection_failure0[log os info collection failure]:::task
+  Log_OS_info_collection_failure0-.->|End of Rescue Block| Collect_OS_metrics3_block_start_0
+  Log_OS_info_collection_failure0-->|Block Start| Collect_network_info4_block_start_0[[collect network info]]:::block
+  Collect_network_info4_block_start_0-->|Include task| Get_main_IP_address_collect_metric_yml_0[get main ip address<br>include_task: collect metric yml]:::includeTasks
+  Get_main_IP_address_collect_metric_yml_0-->|Task| Set_network_fact1[set network fact<br>When: **sysinspect collect network**]:::task
+  Set_network_fact1-.->|End of Block| Collect_network_info4_block_start_0
+  Set_network_fact1-->|Rescue Start| Collect_network_info4_rescue_start_0[collect network info]:::rescue
+  Collect_network_info4_rescue_start_0-->|Task| Log_network_info_collection_failure0[log network info collection failure]:::task
+  Log_network_info_collection_failure0-.->|End of Rescue Block| Collect_network_info4_block_start_0
+  Log_network_info_collection_failure0-->|Block Start| Check_threshold_alerts5_block_start_0[[check threshold alerts]]:::block
+  Check_threshold_alerts5_block_start_0-->|Task| Alert_on_high_CPU0[alert on high cpu<br>When: **system data cpu usage   default 0    sysinspect<br>cpu alert threshold**]:::task
+  Alert_on_high_CPU0-->|Task| Alert_on_high_memory1[alert on high memory<br>When: **system data memory usage   default 0    sysinspect<br>memory alert threshold**]:::task
+  Alert_on_high_memory1-.->|End of Block| Check_threshold_alerts5_block_start_0
+  Alert_on_high_memory1-->|Rescue Start| Check_threshold_alerts5_rescue_start_0[check threshold alerts]:::rescue
+  Check_threshold_alerts5_rescue_start_0-->|Task| Threshold_alert_processing_failed0[threshold alert processing failed]:::task
+  Threshold_alert_processing_failed0-.->|End of Rescue Block| Check_threshold_alerts5_block_start_0
+  Threshold_alert_processing_failed0-->|Task| Append_role_configuration_to_report_data6[append role configuration to report data]:::task
+  Append_role_configuration_to_report_data6-->|Task| Show_final_system_report_JSON__debug_mode_7[show final system report json  debug mode <br>When: **sysinspect debug mode**]:::task
+  Show_final_system_report_JSON__debug_mode_7-->|Task| Write_system_report_to_JSON_file8[write system report to json file]:::task
+  Write_system_report_to_JSON_file8-->|Task| Send_report_to_webhook9[send report to webhook<br>When: **sysinspect report webhook url**]:::task
+  Send_report_to_webhook9-->End
+```
+
+
+### Graph for collect_metric.yml
+
+```mermaid
+flowchart TD
+Start
+classDef block stroke:#3498db,stroke-width:2px;
+classDef task stroke:#4b76bb,stroke-width:2px;
+classDef includeTasks stroke:#16a085,stroke-width:2px;
+classDef importTasks stroke:#34495e,stroke-width:2px;
+classDef includeRole stroke:#2980b9,stroke-width:2px;
+classDef importRole stroke:#699ba7,stroke-width:2px;
+classDef includeVars stroke:#8e44ad,stroke-width:2px;
+classDef rescue stroke:#665352,stroke-width:2px;
+
+  Start-->|Task| Run_metric_shell_command_for_metric_name0[run metric shell command for metric name<br>When: **metric collect**]:::task
+  Run_metric_shell_command_for_metric_name0-->|Task| Transfer_result_to_dynamic_register_var1[transfer result to dynamic register var<br>When: **metric collect**]:::task
+  Transfer_result_to_dynamic_register_var1-->End
+```
+
+
+## Playbook
+
+```yml
+#SPDX-License-Identifier: MIT-0
+---
+- name: Sysinspect playbook
+  hosts: localhost
+  remote_user: root
+  roles:
+    - ../sysinspect
+
+```
+## Playbook graph
+```mermaid
+flowchart TD
+  localhost-->|Role| ___sysinspect[   sysinspect]
+```
+
+## Author Information
+Lucian BLETAN
+
+#### License
+
+MIT
+
+#### Minimum Ansible Version
+
+2.1
+
+#### Platforms
+
+No platforms specified.
+
+#### Dependencies
+
+No dependencies specified.
+<!-- DOCSIBLE END -->

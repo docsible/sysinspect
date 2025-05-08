@@ -1,0 +1,50 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for sysinspect
+
+# title: Enable debug mode for detailed output
+# required: false
+# description-lines:
+# If true, the role will display additional debug information at runtime,
+# including the final assembled JSON report before writing or sending it.
+sysinspect_debug_mode: true
+
+# title: Output path for system report
+# Unwanted: in_readme
+# Another unwanted content
+# required: true
+# description: Path where the final JSON report will be written.
+sysinspect_report_output_path: "/tmp/system_report.json"
+
+# Unwanted information in readme
+# TiTle: Send report to webhook
+# ReQuiRed: false
+# DeScripTion: URL of the HTTP endpoint that will receive the report.
+sysinspect_report_webhook_url: ""
+
+# title: Collect CPU, memory, and disk usage
+# required: true
+# description: Enable or disable hardware metric collection.
+# Unwanted information in readme
+sysinspect_collect_hardware: true
+
+# title: Collect OS, kernel, and uptime info
+# required: true
+# Testing: for unwanted informations
+# description: Enable or disable operating system info collection.
+sysinspect_collect_os: true
+
+# title: Collect network information (IP addresses)
+# required: true
+# description: Enable or disable network diagnostics.
+sysinspect_collect_network: true
+
+# title: CPU usage alert threshold
+# required: false
+# description: If CPU usage exceeds this percentage, it will trigger an alert.
+sysinspect_cpu_alert_threshold: 90  # %
+
+# title: Memory usage alert threshold
+# required: false
+# description: If memory usage exceeds this percentage, it will trigger an alert.
+sysinspect_memory_alert_threshold: 90  # %

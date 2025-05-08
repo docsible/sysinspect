@@ -1,0 +1,7 @@
+#SPDX-License-Identifier: MIT-0
+---
+- name: Sysinspect playbook
+  hosts: localhost
+  remote_user: root
+  roles:
+    - ../sysinspect

@@ -1,0 +1,18 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for sysinspect
+
+- name: Run metric shell command for {{ metric_name }}
+  ansible.builtin.shell: |
+    set -o pipefail
+    {{ metric_command }}
+  args:
+    executable: /bin/bash
+  register: metric_result
+  changed_when: true
+  when: metric_collect
+
+- name: Transfer result to dynamic register var
+  ansible.builtin.set_fact:
+    "{{ metric_register }}": "{{ metric_result }}"
+  when: metric_collect

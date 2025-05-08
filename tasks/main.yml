@@ -1,0 +1,178 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for sysinspect
+
+- name: Begin system diagnostics
+  ansible.builtin.debug:
+    msg: "🚀 Initializing system inspection on {{ inventory_hostname }}"
+
+- name: Initialize data dictionary
+  ansible.builtin.set_fact:
+    system_data: {}
+
+# --- Hardware Block ---
+- name: Collect hardware metrics
+  block:
+    # Collect CPU usage
+    - name: Collect CPU usage
+      ansible.builtin.include_tasks: collect_metric.yml
+      vars:
+        metric_name: "CPU usage"
+        metric_command: "top -bn1 | grep 'Cpu(s)' | awk '{print 100 - $8}'"
+        metric_register: "cpu_usage"
+        metric_collect: sysinspect_collect_hardware
+
+    # Collect memory usage
+    - name: Collect memory usage
+      ansible.builtin.include_tasks: collect_metric.yml
+      vars:
+        metric_name: "Memory usage"
+        metric_command: "free | awk '/Mem/ {printf(\"%.2f\", $3/$2 * 100.0) }'"
+        metric_register: "mem_usage"
+        metric_collect: sysinspect_collect_hardware
+
+    # Collect disk usage
+    - name: Collect disk usage
+      ansible.builtin.import_tasks: collect_metric.yml
+      vars:
+        metric_name: "Disk usage"
+        metric_command: "df / --output=pcent | tail -1 | tr -dc '0-9'"
+        metric_register: "disk_usage"
+        metric_collect: sysinspect_collect_hardware
+
+    - name: Set hardware facts
+      ansible.builtin.set_fact:
+        system_data: >-
+          {{ system_data | combine({
+            'cpu_usage': cpu_usage.stdout | float,
+            'memory_usage': mem_usage.stdout | float,
+            'disk_usage_percent': disk_usage.stdout | int
+          }) }}
+      when: sysinspect_collect_hardware
+
+
+  rescue:
+    - name: Log hardware collection failure
+      ansible.builtin.debug:
+        msg: "❌ Failed to collect hardware metrics."
+
+# --- OS Block ---
+- name: Collect OS metrics
+  block:
+    - name: Get OS version
+      ansible.builtin.import_tasks: collect_metric.yml
+      vars:
+        metric_name: "OS version"
+        metric_command: "grep PRETTY_NAME /etc/os-release | cut -d= -f2 | tr -d '\"'"
+        metric_register: "os_name"
+        metric_collect: sysinspect_collect_os
+
+    - name: Get kernel version
+      ansible.builtin.include_tasks: collect_metric.yml
+      vars:
+        metric_name: "Kernel version"
+        metric_command: "uname -r"
+        metric_register: "kernel_version"
+        metric_collect: sysinspect_collect_os
+
+    - name: Get uptime
+      ansible.builtin.include_tasks: collect_metric.yml
+      vars:
+        metric_name: "Uptime"
+        metric_command: "uptime -p"
+        metric_register: "uptime"
+        metric_collect: sysinspect_collect_os
+
+    - name: Set OS facts
+      ansible.builtin.set_fact:
+        system_data: >-
+          {{ system_data | combine({
+            'os': os_name.stdout,
+            'kernel': kernel_version.stdout,
+            'uptime': uptime.stdout
+          }) }}
+      when: sysinspect_collect_os
+
+  rescue:
+    - name: Log OS info collection failure
+      ansible.builtin.debug:
+        msg: "❌ Failed to collect OS information."
+
+# --- Network Block ---
+- name: Collect network info
+  block:
+    - name: Get main IP address
+      ansible.builtin.include_tasks: collect_metric.yml
+      vars:
+        metric_name: "Main IP address"
+        metric_command: "hostname -I | awk '{print $1}'"
+        metric_register: "ip_address"
+        metric_collect: sysinspect_collect_network
+
+    - name: Set network fact
+      ansible.builtin.set_fact:
+        system_data: "{{ system_data | combine({'ip_address': ip_address.stdout}) }}"
+      when: sysinspect_collect_network
+
+  rescue:
+    - name: Log network info collection failure
+      ansible.builtin.debug:
+        msg: "❌ Network information collection failed."
+
+# --- Resource Threshold Alerts ---
+- name: Check threshold alerts
+  block:
+    - name: Alert on high CPU
+      ansible.builtin.debug:
+        msg: "🔥 High CPU Usage Detected: {{ system_data.cpu_usage }}%"
+      when: system_data.cpu_usage | default(0) > sysinspect_cpu_alert_threshold
+
+    - name: Alert on high memory
+      ansible.builtin.debug:
+        msg: "💾 High Memory Usage Detected: {{ system_data.memory_usage }}%"
+      when: system_data.memory_usage | default(0) > sysinspect_memory_alert_threshold
+
+  rescue:
+    - name: Threshold alert processing failed
+      ansible.builtin.debug:
+        msg: "⚠️ Failed to process threshold checks. Diagnostics may be incomplete."
+
+# --- Include Configuration Parameters into Report ---
+- name: Append role configuration to report data
+  ansible.builtin.set_fact:
+    system_data: >-
+      {{ system_data | combine({
+        'config': {
+          'collect_hardware': sysinspect_collect_hardware,
+          'collect_os': sysinspect_collect_os,
+          'collect_network': sysinspect_collect_network,
+          'cpu_alert_threshold': sysinspect_cpu_alert_threshold,
+          'memory_alert_threshold': sysinspect_memory_alert_threshold,
+          'report_output_path': sysinspect_report_output_path,
+          'webhook_url_set': sysinspect_report_webhook_url != ''
+        }
+      }, recursive=True) }}
+
+# --- Debug Final Report ---
+- name: Show final system report JSON (debug mode)
+  ansible.builtin.debug:
+    var: system_data
+  when: sysinspect_debug_mode
+
+# --- Output JSON ---
+- name: Write system report to JSON file
+  ansible.builtin.copy:
+    dest: "{{ sysinspect_report_output_path }}"
+    content: "{{ system_data | to_nice_json }}"
+    mode: '0600'
+
+# --- Send to webhook if URL is defined ---
+- name: Send report to webhook
+  ansible.builtin.uri:
+    url: "{{ sysinspect_report_webhook_url }}"
+    method: POST
+    headers:
+      Content-Type: "application/json"
+    body: "{{ system_data | to_json }}"
+    status_code: 200
+  when: sysinspect_report_webhook_url != ""
