@@ -160,7 +160,25 @@ including the final assembled JSON report before writing or sending it.<br>
 | Var          | Type         | Value       |Required    | Title       |
 |--------------|--------------|-------------|------------|-------------|
 | [sysinspect_suite_name](vars/main.yml#L8)   | str | `System Inspector v1.0` |    true  |  Name of the diagnostic suite |
-| [sysinspect_phases](vars/main.yml#L15)   | list | |    true  |  Phases of system inspection |
+| [sysinspect_phases](vars/main.yml#L15)   | list | `[]` |    true  |  Phases of system inspection |
+| sysinspect_phases.0.**id** | str | `hardware_check` | true|Phases of system inspection|
+| sysinspect_phases.0.**label** | str | `Hardware Metrics Collection` | true|Phases of system inspection|
+| sysinspect_phases.0.**description** | str | `Collects CPU, memory, and disk usage statistics.` | true|Phases of system inspection|
+| sysinspect_phases.1.**id** | str | `os_info_check` | true|Phases of system inspection|
+| sysinspect_phases.1.**label** | str | `Operating System Inspection` | true|Phases of system inspection|
+| sysinspect_phases.1.**description** | str | `Retrieves OS name, kernel version, and system uptime.` | true|Phases of system inspection|
+| sysinspect_phases.2.**id** | str | `network_check` | true|Phases of system inspection|
+| sysinspect_phases.2.**label** | str | `Network Interface Summary` | true|Phases of system inspection|
+| sysinspect_phases.2.**description** | str | `Gathers IP addresses and basic networking diagnostics.` | true|Phases of system inspection|
+| sysinspect_phases.3.**id** | str | `threshold_alerts` | true|Phases of system inspection|
+| sysinspect_phases.3.**label** | str | `Resource Threshold Validation` | true|Phases of system inspection|
+| sysinspect_phases.3.**description** | str | `Checks if resource usage exceeds critical thresholds and logs alerts.` | true|Phases of system inspection|
+| sysinspect_phases.4.**id** | str | `json_output` | true|Phases of system inspection|
+| sysinspect_phases.4.**label** | str | `Structured JSON Output` | true|Phases of system inspection|
+| sysinspect_phases.4.**description** | str | `Formats collected data into a structured JSON report.` | true|Phases of system inspection|
+| sysinspect_phases.5.**id** | str | `webhook_post` | true|Phases of system inspection|
+| sysinspect_phases.5.**label** | str | `Webhook Transmission` | true|Phases of system inspection|
+| sysinspect_phases.5.**description** | str | `Sends the JSON report to an external system if a webhook URL is defined.` | true|Phases of system inspection|
 | [sysinspect_tool_name](vars/main.yml#L45)   | str | `InspectorCoreShell` |    true  |  Internal name of the diagnostic tool |
 <details>
 <summary><b>🖇️ Full Descriptions for vars in vars/main.yml</b></summary>
@@ -182,41 +200,61 @@ Used in output headers, reports, and external integrations to track tool identit
 
 #### File: tasks/collect_metric.yml
 
-| Name | Module | Has Conditions | Tags | Comments |
-| ---- | ------ | -------------- | -----| -------- |
-| Run metric shell command for {{ metric_name }} | ansible.builtin.shell | True |  | tasks file for sysinspect |
-| Transfer result to dynamic register var | ansible.builtin.set_fact | True |  |  |
+| Name | Module | Has Conditions | Comments |
+| ---- | ------ | -------------- | -------- |
+| Run metric shell command for {{ metric_name }} | ansible.builtin.shell | True | tasks file for sysinspect |
+| Transfer result to dynamic register var | ansible.builtin.set_fact | True |  |
 
 #### File: tasks/main.yml
 
-| Name | Module | Has Conditions | Tags | Comments |
-| ---- | ------ | -------------- | -----| -------- |
-| Begin system diagnostics | ansible.builtin.debug | False |  | tasks file for sysinspect |
-| Initialize data dictionary | ansible.builtin.set_fact | False |  |  |
-| Collect hardware metrics | block | False |  | --- Hardware Block --- |
-| Collect CPU usage | ansible.builtin.include_tasks | False |  | Collect CPU usage |
-| Collect memory usage | ansible.builtin.include_tasks | False |  | Collect memory usage |
-| Collect disk usage | ansible.builtin.import_tasks | False |  | Collect disk usage |
-| Set hardware facts | ansible.builtin.set_fact | True |  |  |
-| Collect OS metrics | block | False |  | --- OS Block --- |
-| Get OS version | ansible.builtin.import_tasks | False |  |  |
-| Get kernel version | ansible.builtin.include_tasks | False |  |  |
-| Get uptime | ansible.builtin.include_tasks | False |  |  |
-| Set OS facts | ansible.builtin.set_fact | True |  |  |
-| Collect network info | block | False |  | --- Network Block --- |
-| Get main IP address | ansible.builtin.include_tasks | False |  |  |
-| Set network fact | ansible.builtin.set_fact | True |  |  |
-| Check threshold alerts | block | False |  | --- Resource Threshold Alerts --- |
-| Alert on high CPU | ansible.builtin.debug | True |  |  |
-| Alert on high memory | ansible.builtin.debug | True |  |  |
-| Append role configuration to report data | ansible.builtin.set_fact | False |  | --- Include Configuration Parameters into Report --- |
-| Show final system report JSON (debug mode) | ansible.builtin.debug | True |  | --- Debug Final Report --- |
-| Write system report to JSON file | ansible.builtin.copy | False |  | --- Output JSON --- |
-| Send report to webhook | ansible.builtin.uri | True |  | --- Send to webhook if URL is defined --- |
+| Name | Module | Has Conditions | Comments |
+| ---- | ------ | -------------- | -------- |
+| Begin system diagnostics | ansible.builtin.debug | False | tasks file for sysinspect |
+| Initialize data dictionary | ansible.builtin.set_fact | False |  |
+| Collect hardware metrics | block | False | --- Hardware Block --- |
+| Collect CPU usage | ansible.builtin.include_tasks | False | Collect CPU usage |
+| Collect memory usage | ansible.builtin.include_tasks | False | Collect memory usage |
+| Collect disk usage | ansible.builtin.import_tasks | False | Collect disk usage |
+| Set hardware facts | ansible.builtin.set_fact | True |  |
+| Collect OS metrics | block | False | --- OS Block --- |
+| Get OS version | ansible.builtin.import_tasks | False |  |
+| Get kernel version | ansible.builtin.include_tasks | False |  |
+| Get uptime | ansible.builtin.include_tasks | False |  |
+| Set OS facts | ansible.builtin.set_fact | True |  |
+| Collect network info | block | False | --- Network Block --- |
+| Get main IP address | ansible.builtin.include_tasks | False |  |
+| Set network fact | ansible.builtin.set_fact | True |  |
+| Check threshold alerts | block | False | --- Resource Threshold Alerts --- |
+| Alert on high CPU | ansible.builtin.debug | True |  |
+| Alert on high memory | ansible.builtin.debug | True |  |
+| Append role configuration to report data | ansible.builtin.set_fact | False | --- Include Configuration Parameters into Report --- |
+| Show final system report JSON (debug mode) | ansible.builtin.debug | True | --- Debug Final Report --- |
+| Write system report to JSON file | ansible.builtin.copy | False | --- Output JSON --- |
+| Send report to webhook | ansible.builtin.uri | True | --- Send to webhook if URL is defined --- |
 
 
 ## Task Flow Graphs
 
+
+
+### Graph for collect_metric.yml
+
+```mermaid
+flowchart TD
+Start
+classDef block stroke:#3498db,stroke-width:2px;
+classDef task stroke:#4b76bb,stroke-width:2px;
+classDef includeTasks stroke:#16a085,stroke-width:2px;
+classDef importTasks stroke:#34495e,stroke-width:2px;
+classDef includeRole stroke:#2980b9,stroke-width:2px;
+classDef importRole stroke:#699ba7,stroke-width:2px;
+classDef includeVars stroke:#8e44ad,stroke-width:2px;
+classDef rescue stroke:#665352,stroke-width:2px;
+
+  Start-->|Task| Run_metric_shell_command_for_metric_name0[run metric shell command for metric name<br>When: **metric collect**]:::task
+  Run_metric_shell_command_for_metric_name0-->|Task| Transfer_result_to_dynamic_register_var1[transfer result to dynamic register var<br>When: **metric collect**]:::task
+  Transfer_result_to_dynamic_register_var1-->End
+```
 
 
 ### Graph for main.yml
@@ -272,26 +310,6 @@ classDef rescue stroke:#665352,stroke-width:2px;
   Show_final_system_report_JSON__debug_mode_7-->|Task| Write_system_report_to_JSON_file8[write system report to json file]:::task
   Write_system_report_to_JSON_file8-->|Task| Send_report_to_webhook9[send report to webhook<br>When: **sysinspect report webhook url**]:::task
   Send_report_to_webhook9-->End
-```
-
-
-### Graph for collect_metric.yml
-
-```mermaid
-flowchart TD
-Start
-classDef block stroke:#3498db,stroke-width:2px;
-classDef task stroke:#4b76bb,stroke-width:2px;
-classDef includeTasks stroke:#16a085,stroke-width:2px;
-classDef importTasks stroke:#34495e,stroke-width:2px;
-classDef includeRole stroke:#2980b9,stroke-width:2px;
-classDef importRole stroke:#699ba7,stroke-width:2px;
-classDef includeVars stroke:#8e44ad,stroke-width:2px;
-classDef rescue stroke:#665352,stroke-width:2px;
-
-  Start-->|Task| Run_metric_shell_command_for_metric_name0[run metric shell command for metric name<br>When: **metric collect**]:::task
-  Run_metric_shell_command_for_metric_name0-->|Task| Transfer_result_to_dynamic_register_var1[transfer result to dynamic register var<br>When: **metric collect**]:::task
-  Transfer_result_to_dynamic_register_var1-->End
 ```
 
 
