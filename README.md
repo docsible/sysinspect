@@ -119,15 +119,15 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
 #### File: defaults/main.yml
 
 | Var          | Type         | Value       |Required    | Title       |
-|--------------|--------------|-------------|-------------|-------------|
-| [sysinspect_debug_mode](defaults/main.yml#L10)   | bool   | `True` |    false  |  Enable debug mode for detailed output |
-| [sysinspect_report_output_path](defaults/main.yml#L17)   | str   | `/tmp/system_report.json` |    true  |  Output path for system report |
-| [sysinspect_report_webhook_url](defaults/main.yml#L23)   | str   |  |    false  |  Send report to webhook |
-| [sysinspect_collect_hardware](defaults/main.yml#L29)   | bool   | `True` |    true  |  Collect CPU, memory, and disk usage |
-| [sysinspect_collect_os](defaults/main.yml#L35)   | bool   | `True` |    true  |  Collect OS, kernel, and uptime info |
-| [sysinspect_collect_network](defaults/main.yml#L40)   | bool   | `True` |    true  |  Collect network information (IP addresses) |
-| [sysinspect_cpu_alert_threshold](defaults/main.yml#L45)   | int   | `90` |    false  |  CPU usage alert threshold |
-| [sysinspect_memory_alert_threshold](defaults/main.yml#L50)   | int   | `90` |    false  |  Memory usage alert threshold |
+|--------------|--------------|-------------|------------|-------------|
+| [sysinspect_debug_mode](defaults/main.yml#L10)   | bool | `True` |    false  |  Enable debug mode for detailed output |
+| [sysinspect_report_output_path](defaults/main.yml#L17)   | str | `/tmp/system_report.json` |    true  |  Output path for system report |
+| [sysinspect_report_webhook_url](defaults/main.yml#L23)   | str |  |    false  |  Send report to webhook |
+| [sysinspect_collect_hardware](defaults/main.yml#L29)   | bool | `True` |    true  |  Collect CPU, memory, and disk usage |
+| [sysinspect_collect_os](defaults/main.yml#L35)   | bool | `True` |    true  |  Collect OS, kernel, and uptime info |
+| [sysinspect_collect_network](defaults/main.yml#L40)   | bool | `True` |    true  |  Collect network information (IP addresses) |
+| [sysinspect_cpu_alert_threshold](defaults/main.yml#L45)   | int | `90` |    false  |  CPU usage alert threshold |
+| [sysinspect_memory_alert_threshold](defaults/main.yml#L50)   | int | `90` |    false  |  Memory usage alert threshold |
 <details>
 <summary><b>🖇️ Full descriptions for vars in defaults/main.yml</b></summary>
 <br>
@@ -158,10 +158,10 @@ including the final assembled JSON report before writing or sending it.<br>
 #### File: vars/main.yml
 
 | Var          | Type         | Value       |Required    | Title       |
-|--------------|--------------|-------------|-------------|-------------|
-| [sysinspect_suite_name](vars/main.yml#L8)   | str   | `System Inspector v1.0` |    true  |  Name of the diagnostic suite |
-| [sysinspect_phases](vars/main.yml#L15)   | list   | `[{'id': 'hardware_check', 'label': 'Hardware Metrics Collection', 'description': 'Collects CPU, memory, and disk usage statistics.'}, {'id': 'os_info_check', 'label': 'Operating System Inspection', 'description': 'Retrieves OS name, kernel version, and system uptime.'}, {'id': 'network_check', 'label': 'Network Interface Summary', 'description': 'Gathers IP addresses and basic networking diagnostics.'}, {'id': 'threshold_alerts', 'label': 'Resource Threshold Validation', 'description': 'Checks if resource usage exceeds critical thresholds and logs alerts.'}, {'id': 'json_output', 'label': 'Structured JSON Output', 'description': 'Formats collected data into a structured JSON report.'}, {'id': 'webhook_post', 'label': 'Webhook Transmission', 'description': 'Sends the JSON report to an external system if a webhook URL is defined.'}]` |    true  |  Phases of system inspection |
-| [sysinspect_tool_name](vars/main.yml#L45)   | str   | `InspectorCoreShell` |    true  |  Internal name of the diagnostic tool |
+|--------------|--------------|-------------|------------|-------------|
+| [sysinspect_suite_name](vars/main.yml#L8)   | str | `System Inspector v1.0` |    true  |  Name of the diagnostic suite |
+| [sysinspect_phases](vars/main.yml#L15)   | list | |    true  |  Phases of system inspection |
+| [sysinspect_tool_name](vars/main.yml#L45)   | str | `InspectorCoreShell` |    true  |  Internal name of the diagnostic tool |
 <details>
 <summary><b>🖇️ Full Descriptions for vars in vars/main.yml</b></summary>
 <br>
@@ -182,37 +182,37 @@ Used in output headers, reports, and external integrations to track tool identit
 
 #### File: tasks/collect_metric.yml
 
-| Name | Module | Has Conditions | Comments |
-| ---- | ------ | --------- |  -------- |
-| Run metric shell command for {{ metric_name }} | ansible.builtin.shell | True | tasks file for sysinspect |
-| Transfer result to dynamic register var | ansible.builtin.set_fact | True |  |
+| Name | Module | Has Conditions | Tags | Comments |
+| ---- | ------ | -------------- | -----| -------- |
+| Run metric shell command for {{ metric_name }} | ansible.builtin.shell | True |  | tasks file for sysinspect |
+| Transfer result to dynamic register var | ansible.builtin.set_fact | True |  |  |
 
 #### File: tasks/main.yml
 
-| Name | Module | Has Conditions | Comments |
-| ---- | ------ | --------- |  -------- |
-| Begin system diagnostics | ansible.builtin.debug | False | tasks file for sysinspect |
-| Initialize data dictionary | ansible.builtin.set_fact | False |  |
-| Collect hardware metrics | block | False | --- Hardware Block --- |
-| Collect CPU usage | ansible.builtin.include_tasks | False | Collect CPU usage |
-| Collect memory usage | ansible.builtin.include_tasks | False | Collect memory usage |
-| Collect disk usage | ansible.builtin.import_tasks | False | Collect disk usage |
-| Set hardware facts | ansible.builtin.set_fact | True |  |
-| Collect OS metrics | block | False | --- OS Block --- |
-| Get OS version | ansible.builtin.import_tasks | False |  |
-| Get kernel version | ansible.builtin.include_tasks | False |  |
-| Get uptime | ansible.builtin.include_tasks | False |  |
-| Set OS facts | ansible.builtin.set_fact | True |  |
-| Collect network info | block | False | --- Network Block --- |
-| Get main IP address | ansible.builtin.include_tasks | False |  |
-| Set network fact | ansible.builtin.set_fact | True |  |
-| Check threshold alerts | block | False | --- Resource Threshold Alerts --- |
-| Alert on high CPU | ansible.builtin.debug | True |  |
-| Alert on high memory | ansible.builtin.debug | True |  |
-| Append role configuration to report data | ansible.builtin.set_fact | False | --- Include Configuration Parameters into Report --- |
-| Show final system report JSON (debug mode) | ansible.builtin.debug | True | --- Debug Final Report --- |
-| Write system report to JSON file | ansible.builtin.copy | False | --- Output JSON --- |
-| Send report to webhook | ansible.builtin.uri | True | --- Send to webhook if URL is defined --- |
+| Name | Module | Has Conditions | Tags | Comments |
+| ---- | ------ | -------------- | -----| -------- |
+| Begin system diagnostics | ansible.builtin.debug | False |  | tasks file for sysinspect |
+| Initialize data dictionary | ansible.builtin.set_fact | False |  |  |
+| Collect hardware metrics | block | False |  | --- Hardware Block --- |
+| Collect CPU usage | ansible.builtin.include_tasks | False |  | Collect CPU usage |
+| Collect memory usage | ansible.builtin.include_tasks | False |  | Collect memory usage |
+| Collect disk usage | ansible.builtin.import_tasks | False |  | Collect disk usage |
+| Set hardware facts | ansible.builtin.set_fact | True |  |  |
+| Collect OS metrics | block | False |  | --- OS Block --- |
+| Get OS version | ansible.builtin.import_tasks | False |  |  |
+| Get kernel version | ansible.builtin.include_tasks | False |  |  |
+| Get uptime | ansible.builtin.include_tasks | False |  |  |
+| Set OS facts | ansible.builtin.set_fact | True |  |  |
+| Collect network info | block | False |  | --- Network Block --- |
+| Get main IP address | ansible.builtin.include_tasks | False |  |  |
+| Set network fact | ansible.builtin.set_fact | True |  |  |
+| Check threshold alerts | block | False |  | --- Resource Threshold Alerts --- |
+| Alert on high CPU | ansible.builtin.debug | True |  |  |
+| Alert on high memory | ansible.builtin.debug | True |  |  |
+| Append role configuration to report data | ansible.builtin.set_fact | False |  | --- Include Configuration Parameters into Report --- |
+| Show final system report JSON (debug mode) | ansible.builtin.debug | True |  | --- Debug Final Report --- |
+| Write system report to JSON file | ansible.builtin.copy | False |  | --- Output JSON --- |
+| Send report to webhook | ansible.builtin.uri | True |  | --- Send to webhook if URL is defined --- |
 
 
 ## Task Flow Graphs
