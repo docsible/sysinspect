@@ -1,45 +1,87 @@
 #SPDX-License-Identifier: MIT-0
 ---
-# vars file for sysinspect
+# vars file for sysinspect (nested example for doc generator testing)
 
 # title: Name of the diagnostic suite
 # required: true
 # description: Human-readable name of the system inspection suite. Used in logging and reporting.
-sysinspect_suite_name: "System Inspector v1.0"
+sysinspect_suite_name: "System Inspector v2.0"
 
 # title: Phases of system inspection
 # required: true
 # description-lines:
-# List of phases executed by this role. Each phase corresponds to a logical block of diagnostics.
-# This structure is used to organize reports and debug output for better traceability.
+# Nested list of inspection phases.
+# Each phase can contain one or more subphases with their own labels, descriptions, and conditions.
 sysinspect_phases:
   - id: hardware_check
     label: "Hardware Metrics Collection"
-    description: "Collects CPU, memory, and disk usage statistics."
+    description: "Collects hardware statistics including nested device checks."
+    subphases:
+      - id: cpu_inspect
+        label: "CPU Details"
+        description: "Gathers model, core count, and usage per core."
+
+      - id: mem_inspect
+        label: "Memory Details"
+        description: "Retrieves total, used, and free memory."
+
+      - id: disk_inspect
+        label: "Disk Inspection"
+        description: "Inspects mounted filesystems, usage, and I/O metrics."
+        conditions:
+          min_disk_free_percent: 10  # Trigger alert if disk usage exceeds 90%
 
   - id: os_info_check
     label: "Operating System Inspection"
-    description: "Retrieves OS name, kernel version, and system uptime."
+    description: "Retrieves OS, kernel version, uptime."
+    metadata:
+      os_release_files:
+        - /etc/os-release
+        - /etc/lsb-release
+      include_hostname: true
 
   - id: network_check
-    label: "Network Interface Summary"
-    description: "Gathers IP addresses and basic networking diagnostics."
+    label: "Network Interfaces"
+    description: "Collects interface configs and ping tests."
+    interfaces:
+      - name: eth0
+        expected_state: "up"
+        test_ping: "8.8.8.8"
+      - name: wlan0
+        expected_state: "down"
+        test_ping: null
 
-  - id: threshold_alerts
-    label: "Resource Threshold Validation"
-    description: "Checks if resource usage exceeds critical thresholds and logs alerts."
+  - id: alerting
+    label: "Threshold & Alert Logic"
+    description: "Evaluates CPU and memory thresholds to trigger warnings."
+    thresholds:
+      cpu:
+        warn: 75
+        crit: 90
+      memory:
+        warn: 80
+        crit: 95
 
   - id: json_output
-    label: "Structured JSON Output"
-    description: "Formats collected data into a structured JSON report."
+    label: "JSON Report Structuring"
+    description: "Formats inspection output in JSON."
+    include_metadata: true
+    sanitize_keys: true
 
   - id: webhook_post
-    label: "Webhook Transmission"
-    description: "Sends the JSON report to an external system if a webhook URL is defined."
+    label: "Webhook Result Push"
+    description: "Sends report to external endpoint if configured."
+    config:
+      enabled: true
+      retry_count: 3
+      timeout_seconds: 5
+      endpoint: "{{ sysinspect_webhook_url | default('') }}"
 
-# title: Internal name of the diagnostic tool
+# title: Internal tool metadata
 # required: true
 # description-lines:
-# Technical identifier for this inspection system.
-# Used in output headers, reports, and external integrations to track tool identity.
-sysinspect_tool_name: "InspectorCoreShell"
+# Information used for versioning and tool identity.
+sysinspect_tool_info:
+  name: "InspectorCoreShell"
+  version: "2.0.1"
+  license: "MIT-0"
