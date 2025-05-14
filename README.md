@@ -119,15 +119,15 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
 #### File: defaults/main.yml
 
 | Var          | Type         | Value       |Required    | Title       |
-|--------------|--------------|-------------|-------------|-------------|
-| [sysinspect_debug_mode](defaults/main.yml#L10)   | bool   | `True` |    false  |  Enable debug mode for detailed output |
-| [sysinspect_report_output_path](defaults/main.yml#L17)   | str   | `/tmp/system_report.json` |    true  |  Output path for system report |
-| [sysinspect_report_webhook_url](defaults/main.yml#L23)   | str   |  |    false  |  Send report to webhook |
-| [sysinspect_collect_hardware](defaults/main.yml#L29)   | bool   | `True` |    true  |  Collect CPU, memory, and disk usage |
-| [sysinspect_collect_os](defaults/main.yml#L35)   | bool   | `True` |    true  |  Collect OS, kernel, and uptime info |
-| [sysinspect_collect_network](defaults/main.yml#L40)   | bool   | `True` |    true  |  Collect network information (IP addresses) |
-| [sysinspect_cpu_alert_threshold](defaults/main.yml#L45)   | int   | `90` |    false  |  CPU usage alert threshold |
-| [sysinspect_memory_alert_threshold](defaults/main.yml#L50)   | int   | `90` |    false  |  Memory usage alert threshold |
+|--------------|--------------|-------------|------------|-------------|
+| [sysinspect_debug_mode](defaults/main.yml#L10)   | bool | `True` |    false  |  Enable debug mode for detailed output |
+| [sysinspect_report_output_path](defaults/main.yml#L17)   | str | `/tmp/system_report.json` |    true  |  Output path for system report |
+| [sysinspect_report_webhook_url](defaults/main.yml#L23)   | str |  |    false  |  Send report to webhook |
+| [sysinspect_collect_hardware](defaults/main.yml#L29)   | bool | `True` |    true  |  Collect CPU, memory, and disk usage |
+| [sysinspect_collect_os](defaults/main.yml#L35)   | bool | `True` |    true  |  Collect OS, kernel, and uptime info |
+| [sysinspect_collect_network](defaults/main.yml#L40)   | bool | `True` |    true  |  Collect network information (IP addresses) |
+| [sysinspect_cpu_alert_threshold](defaults/main.yml#L45)   | int | `90` |    false  |  CPU usage alert threshold |
+| [sysinspect_memory_alert_threshold](defaults/main.yml#L50)   | int | `90` |    false  |  Memory usage alert threshold |
 <details>
 <summary><b>🖇️ Full descriptions for vars in defaults/main.yml</b></summary>
 <br>
@@ -158,10 +158,69 @@ including the final assembled JSON report before writing or sending it.<br>
 #### File: vars/main.yml
 
 | Var          | Type         | Value       |Required    | Title       |
-|--------------|--------------|-------------|-------------|-------------|
-| [sysinspect_suite_name](vars/main.yml#L8)   | str   | `System Inspector v2.0` |    true  |  Name of the diagnostic suite |
-| [sysinspect_phases](vars/main.yml#L15)   | list   | `[{'id': 'hardware_check', 'label': 'Hardware Metrics Collection', 'description': 'Collects hardware statistics including nested device checks.', 'subphases': [{'id': 'cpu_inspect', 'label': 'CPU Details', 'description': 'Gathers model, core count, and usage per core.'}, {'id': 'mem_inspect', 'label': 'Memory Details', 'description': 'Retrieves total, used, and free memory.'}, {'id': 'disk_inspect', 'label': 'Disk Inspection', 'description': 'Inspects mounted filesystems, usage, and I/O metrics.', 'conditions': {'min_disk_free_percent': 10}}]}, {'id': 'os_info_check', 'label': 'Operating System Inspection', 'description': 'Retrieves OS, kernel version, uptime.', 'metadata': {'os_release_files': ['/etc/os-release', '/etc/lsb-release'], 'include_hostname': True}}, {'id': 'network_check', 'label': 'Network Interfaces', 'description': 'Collects interface configs and ping tests.', 'interfaces': [{'name': 'eth0', 'expected_state': 'up', 'test_ping': '8.8.8.8'}, {'name': 'wlan0', 'expected_state': 'down', 'test_ping': None}]}, {'id': 'alerting', 'label': 'Threshold & Alert Logic', 'description': 'Evaluates CPU and memory thresholds to trigger warnings.', 'thresholds': {'cpu': {'warn': 75, 'crit': 90}, 'memory': {'warn': 80, 'crit': 95}}}, {'id': 'json_output', 'label': 'JSON Report Structuring', 'description': 'Formats inspection output in JSON.', 'include_metadata': True, 'sanitize_keys': True}, {'id': 'webhook_post', 'label': 'Webhook Result Push', 'description': 'Sends report to external endpoint if configured.', 'config': {'enabled': True, 'retry_count': 3, 'timeout_seconds': 5, 'endpoint': "{{ sysinspect_webhook_url ¦ default('') }}"}}]` |    true  |  Phases of system inspection |
-| [sysinspect_tool_info](vars/main.yml#L84)   | dict   | `{'name': 'InspectorCoreShell', 'version': '2.0.1', 'license': 'MIT-0'}` |    true  |  Internal tool metadata |
+|--------------|--------------|-------------|------------|-------------|
+| [sysinspect_suite_name](vars/main.yml#L8)   | str | `System Inspector v2.0` |    true  |  Name of the diagnostic suite |
+| [sysinspect_phases](vars/main.yml#L15)   | list | `[]` |    true  |  Phases of system inspection |
+| sysinspect_phases.0.**id** | str | `hardware_check` | true|Phases of system inspection|
+| sysinspect_phases.0.**label** | str | `Hardware Metrics Collection` | true|Phases of system inspection|
+| sysinspect_phases.0.**description** | str | `Collects hardware statistics including nested device checks.` | true|Phases of system inspection|
+| sysinspect_phases.0.**subphases** | list | `[]` | true|Phases of system inspection|
+| sysinspect_phases.0.subphases.0.**id** | str | `cpu_inspect` | true|Phases of system inspection|
+| sysinspect_phases.0.subphases.0.**label** | str | `CPU Details` | true|Phases of system inspection|
+| sysinspect_phases.0.subphases.0.**description** | str | `Gathers model, core count, and usage per core.` | true|Phases of system inspection|
+| sysinspect_phases.0.subphases.1.**id** | str | `mem_inspect` | true|Phases of system inspection|
+| sysinspect_phases.0.subphases.1.**label** | str | `Memory Details` | true|Phases of system inspection|
+| sysinspect_phases.0.subphases.1.**description** | str | `Retrieves total, used, and free memory.` | true|Phases of system inspection|
+| sysinspect_phases.0.subphases.2.**id** | str | `disk_inspect` | true|Phases of system inspection|
+| sysinspect_phases.0.subphases.2.**label** | str | `Disk Inspection` | true|Phases of system inspection|
+| sysinspect_phases.0.subphases.2.**description** | str | `Inspects mounted filesystems, usage, and I/O metrics.` | true|Phases of system inspection|
+| sysinspect_phases.0.subphases.2.**conditions** | dict | `{}` | true|Phases of system inspection|
+| sysinspect_phases.0.subphases.2.conditions.**min_disk_free_percent** | int | `10` | true|Phases of system inspection|
+| sysinspect_phases.1.**id** | str | `os_info_check` | true|Phases of system inspection|
+| sysinspect_phases.1.**label** | str | `Operating System Inspection` | true|Phases of system inspection|
+| sysinspect_phases.1.**description** | str | `Retrieves OS, kernel version, uptime.` | true|Phases of system inspection|
+| sysinspect_phases.1.**metadata** | dict | `{}` | true|Phases of system inspection|
+| sysinspect_phases.1.metadata.**os_release_files** | list | `[]` | true|Phases of system inspection|
+| sysinspect_phases.1.metadata.os_release_files.**0** | str | `/etc/os-release` | true|Phases of system inspection|
+| sysinspect_phases.1.metadata.os_release_files.**1** | str | `/etc/lsb-release` | true|Phases of system inspection|
+| sysinspect_phases.1.metadata.**include_hostname** | bool | `True` | true|Phases of system inspection|
+| sysinspect_phases.2.**id** | str | `network_check` | true|Phases of system inspection|
+| sysinspect_phases.2.**label** | str | `Network Interfaces` | true|Phases of system inspection|
+| sysinspect_phases.2.**description** | str | `Collects interface configs and ping tests.` | true|Phases of system inspection|
+| sysinspect_phases.2.**interfaces** | list | `[]` | true|Phases of system inspection|
+| sysinspect_phases.2.interfaces.0.**name** | str | `eth0` | true|Phases of system inspection|
+| sysinspect_phases.2.interfaces.0.**expected_state** | str | `up` | true|Phases of system inspection|
+| sysinspect_phases.2.interfaces.0.**test_ping** | str | `8.8.8.8` | true|Phases of system inspection|
+| sysinspect_phases.2.interfaces.1.**name** | str | `wlan0` | true|Phases of system inspection|
+| sysinspect_phases.2.interfaces.1.**expected_state** | str | `down` | true|Phases of system inspection|
+| sysinspect_phases.2.interfaces.1.**test_ping** | int | `None` | true|Phases of system inspection|
+| sysinspect_phases.3.**id** | str | `alerting` | true|Phases of system inspection|
+| sysinspect_phases.3.**label** | str | `Threshold & Alert Logic` | true|Phases of system inspection|
+| sysinspect_phases.3.**description** | str | `Evaluates CPU and memory thresholds to trigger warnings.` | true|Phases of system inspection|
+| sysinspect_phases.3.**thresholds** | dict | `{}` | true|Phases of system inspection|
+| sysinspect_phases.3.thresholds.**cpu** | dict | `{}` | true|Phases of system inspection|
+| sysinspect_phases.3.thresholds.cpu.**warn** | int | `75` | true|Phases of system inspection|
+| sysinspect_phases.3.thresholds.cpu.**crit** | int | `90` | true|Phases of system inspection|
+| sysinspect_phases.3.thresholds.**memory** | dict | `{}` | true|Phases of system inspection|
+| sysinspect_phases.3.thresholds.memory.**warn** | int | `80` | true|Phases of system inspection|
+| sysinspect_phases.3.thresholds.memory.**crit** | int | `95` | true|Phases of system inspection|
+| sysinspect_phases.4.**id** | str | `json_output` | true|Phases of system inspection|
+| sysinspect_phases.4.**label** | str | `JSON Report Structuring` | true|Phases of system inspection|
+| sysinspect_phases.4.**description** | str | `Formats inspection output in JSON.` | true|Phases of system inspection|
+| sysinspect_phases.4.**include_metadata** | bool | `True` | true|Phases of system inspection|
+| sysinspect_phases.4.**sanitize_keys** | bool | `True` | true|Phases of system inspection|
+| sysinspect_phases.5.**id** | str | `webhook_post` | true|Phases of system inspection|
+| sysinspect_phases.5.**label** | str | `Webhook Result Push` | true|Phases of system inspection|
+| sysinspect_phases.5.**description** | str | `Sends report to external endpoint if configured.` | true|Phases of system inspection|
+| sysinspect_phases.5.**config** | dict | `{}` | true|Phases of system inspection|
+| sysinspect_phases.5.config.**enabled** | bool | `True` | true|Phases of system inspection|
+| sysinspect_phases.5.config.**retry_count** | int | `3` | true|Phases of system inspection|
+| sysinspect_phases.5.config.**timeout_seconds** | int | `5` | true|Phases of system inspection|
+| sysinspect_phases.5.config.**endpoint** | str | `{{ sysinspect_webhook_url ¦ default('') }}` | true|Phases of system inspection|
+| [sysinspect_tool_info](vars/main.yml#L84)   | dict | `{}` |    true  |  Internal tool metadata |
+| sysinspect_tool_info.**name** | str | `InspectorCoreShell` | true|Internal tool metadata|
+| sysinspect_tool_info.**version** | str | `2.0.1` | true|Internal tool metadata|
+| sysinspect_tool_info.**license** | str | `MIT-0` | true|Internal tool metadata|
 <details>
 <summary><b>🖇️ Full Descriptions for vars in vars/main.yml</b></summary>
 <br>
@@ -182,14 +241,14 @@ Each phase can contain one or more subphases with their own labels, descriptions
 #### File: tasks/collect_metric.yml
 
 | Name | Module | Has Conditions | Comments |
-| ---- | ------ | --------- |  -------- |
+| ---- | ------ | -------------- | -------- |
 | Run metric shell command for {{ metric_name }} | ansible.builtin.shell | True | tasks file for sysinspect |
 | Transfer result to dynamic register var | ansible.builtin.set_fact | True |  |
 
 #### File: tasks/main.yml
 
 | Name | Module | Has Conditions | Comments |
-| ---- | ------ | --------- |  -------- |
+| ---- | ------ | -------------- | -------- |
 | Begin system diagnostics | ansible.builtin.debug | False | tasks file for sysinspect |
 | Initialize data dictionary | ansible.builtin.set_fact | False |  |
 | Collect hardware metrics | block | False | --- Hardware Block --- |
