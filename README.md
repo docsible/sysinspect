@@ -159,37 +159,77 @@ including the final assembled JSON report before writing or sending it.<br>
 
 | Var          | Type         | Value       |Required    | Title       |
 |--------------|--------------|-------------|------------|-------------|
-| [sysinspect_suite_name](vars/main.yml#L8)   | str | `System Inspector v1.0` |    true  |  Name of the diagnostic suite |
+| [sysinspect_suite_name](vars/main.yml#L8)   | str | `System Inspector v2.0` |    true  |  Name of the diagnostic suite |
 | [sysinspect_phases](vars/main.yml#L15)   | list | `[]` |    true  |  Phases of system inspection |
 | sysinspect_phases.0.**id** | str | `hardware_check` | true|Phases of system inspection|
 | sysinspect_phases.0.**label** | str | `Hardware Metrics Collection` | true|Phases of system inspection|
-| sysinspect_phases.0.**description** | str | `Collects CPU, memory, and disk usage statistics.` | true|Phases of system inspection|
+| sysinspect_phases.0.**description** | str | `Collects hardware statistics including nested device checks.` | true|Phases of system inspection|
+| sysinspect_phases.0.**subphases** | list | `[]` | true|Phases of system inspection|
+| sysinspect_phases.0.subphases.0.**id** | str | `cpu_inspect` | true|Phases of system inspection|
+| sysinspect_phases.0.subphases.0.**label** | str | `CPU Details` | true|Phases of system inspection|
+| sysinspect_phases.0.subphases.0.**description** | str | `Gathers model, core count, and usage per core.` | true|Phases of system inspection|
+| sysinspect_phases.0.subphases.1.**id** | str | `mem_inspect` | true|Phases of system inspection|
+| sysinspect_phases.0.subphases.1.**label** | str | `Memory Details` | true|Phases of system inspection|
+| sysinspect_phases.0.subphases.1.**description** | str | `Retrieves total, used, and free memory.` | true|Phases of system inspection|
+| sysinspect_phases.0.subphases.2.**id** | str | `disk_inspect` | true|Phases of system inspection|
+| sysinspect_phases.0.subphases.2.**label** | str | `Disk Inspection` | true|Phases of system inspection|
+| sysinspect_phases.0.subphases.2.**description** | str | `Inspects mounted filesystems, usage, and I/O metrics.` | true|Phases of system inspection|
+| sysinspect_phases.0.subphases.2.**conditions** | dict | `{}` | true|Phases of system inspection|
+| sysinspect_phases.0.subphases.2.conditions.**min_disk_free_percent** | int | `10` | true|Phases of system inspection|
 | sysinspect_phases.1.**id** | str | `os_info_check` | true|Phases of system inspection|
 | sysinspect_phases.1.**label** | str | `Operating System Inspection` | true|Phases of system inspection|
-| sysinspect_phases.1.**description** | str | `Retrieves OS name, kernel version, and system uptime.` | true|Phases of system inspection|
+| sysinspect_phases.1.**description** | str | `Retrieves OS, kernel version, uptime.` | true|Phases of system inspection|
+| sysinspect_phases.1.**metadata** | dict | `{}` | true|Phases of system inspection|
+| sysinspect_phases.1.metadata.**os_release_files** | list | `[]` | true|Phases of system inspection|
+| sysinspect_phases.1.metadata.os_release_files.**0** | str | `/etc/os-release` | true|Phases of system inspection|
+| sysinspect_phases.1.metadata.os_release_files.**1** | str | `/etc/lsb-release` | true|Phases of system inspection|
+| sysinspect_phases.1.metadata.**include_hostname** | bool | `True` | true|Phases of system inspection|
 | sysinspect_phases.2.**id** | str | `network_check` | true|Phases of system inspection|
-| sysinspect_phases.2.**label** | str | `Network Interface Summary` | true|Phases of system inspection|
-| sysinspect_phases.2.**description** | str | `Gathers IP addresses and basic networking diagnostics.` | true|Phases of system inspection|
-| sysinspect_phases.3.**id** | str | `threshold_alerts` | true|Phases of system inspection|
-| sysinspect_phases.3.**label** | str | `Resource Threshold Validation` | true|Phases of system inspection|
-| sysinspect_phases.3.**description** | str | `Checks if resource usage exceeds critical thresholds and logs alerts.` | true|Phases of system inspection|
+| sysinspect_phases.2.**label** | str | `Network Interfaces` | true|Phases of system inspection|
+| sysinspect_phases.2.**description** | str | `Collects interface configs and ping tests.` | true|Phases of system inspection|
+| sysinspect_phases.2.**interfaces** | list | `[]` | true|Phases of system inspection|
+| sysinspect_phases.2.interfaces.0.**name** | str | `eth0` | true|Phases of system inspection|
+| sysinspect_phases.2.interfaces.0.**expected_state** | str | `up` | true|Phases of system inspection|
+| sysinspect_phases.2.interfaces.0.**test_ping** | str | `8.8.8.8` | true|Phases of system inspection|
+| sysinspect_phases.2.interfaces.1.**name** | str | `wlan0` | true|Phases of system inspection|
+| sysinspect_phases.2.interfaces.1.**expected_state** | str | `down` | true|Phases of system inspection|
+| sysinspect_phases.2.interfaces.1.**test_ping** | int | `None` | true|Phases of system inspection|
+| sysinspect_phases.3.**id** | str | `alerting` | true|Phases of system inspection|
+| sysinspect_phases.3.**label** | str | `Threshold & Alert Logic` | true|Phases of system inspection|
+| sysinspect_phases.3.**description** | str | `Evaluates CPU and memory thresholds to trigger warnings.` | true|Phases of system inspection|
+| sysinspect_phases.3.**thresholds** | dict | `{}` | true|Phases of system inspection|
+| sysinspect_phases.3.thresholds.**cpu** | dict | `{}` | true|Phases of system inspection|
+| sysinspect_phases.3.thresholds.cpu.**warn** | int | `75` | true|Phases of system inspection|
+| sysinspect_phases.3.thresholds.cpu.**crit** | int | `90` | true|Phases of system inspection|
+| sysinspect_phases.3.thresholds.**memory** | dict | `{}` | true|Phases of system inspection|
+| sysinspect_phases.3.thresholds.memory.**warn** | int | `80` | true|Phases of system inspection|
+| sysinspect_phases.3.thresholds.memory.**crit** | int | `95` | true|Phases of system inspection|
 | sysinspect_phases.4.**id** | str | `json_output` | true|Phases of system inspection|
-| sysinspect_phases.4.**label** | str | `Structured JSON Output` | true|Phases of system inspection|
-| sysinspect_phases.4.**description** | str | `Formats collected data into a structured JSON report.` | true|Phases of system inspection|
+| sysinspect_phases.4.**label** | str | `JSON Report Structuring` | true|Phases of system inspection|
+| sysinspect_phases.4.**description** | str | `Formats inspection output in JSON.` | true|Phases of system inspection|
+| sysinspect_phases.4.**include_metadata** | bool | `True` | true|Phases of system inspection|
+| sysinspect_phases.4.**sanitize_keys** | bool | `True` | true|Phases of system inspection|
 | sysinspect_phases.5.**id** | str | `webhook_post` | true|Phases of system inspection|
-| sysinspect_phases.5.**label** | str | `Webhook Transmission` | true|Phases of system inspection|
-| sysinspect_phases.5.**description** | str | `Sends the JSON report to an external system if a webhook URL is defined.` | true|Phases of system inspection|
-| [sysinspect_tool_name](vars/main.yml#L45)   | str | `InspectorCoreShell` |    true  |  Internal name of the diagnostic tool |
+| sysinspect_phases.5.**label** | str | `Webhook Result Push` | true|Phases of system inspection|
+| sysinspect_phases.5.**description** | str | `Sends report to external endpoint if configured.` | true|Phases of system inspection|
+| sysinspect_phases.5.**config** | dict | `{}` | true|Phases of system inspection|
+| sysinspect_phases.5.config.**enabled** | bool | `True` | true|Phases of system inspection|
+| sysinspect_phases.5.config.**retry_count** | int | `3` | true|Phases of system inspection|
+| sysinspect_phases.5.config.**timeout_seconds** | int | `5` | true|Phases of system inspection|
+| sysinspect_phases.5.config.**endpoint** | str | `{{ sysinspect_webhook_url ¦ default('') }}` | true|Phases of system inspection|
+| [sysinspect_tool_info](vars/main.yml#L84)   | dict | `{}` |    true  |  Internal tool metadata |
+| sysinspect_tool_info.**name** | str | `InspectorCoreShell` | true|Internal tool metadata|
+| sysinspect_tool_info.**version** | str | `2.0.1` | true|Internal tool metadata|
+| sysinspect_tool_info.**license** | str | `MIT-0` | true|Internal tool metadata|
 <details>
 <summary><b>🖇️ Full Descriptions for vars in vars/main.yml</b></summary>
 <br>
 <b>sysinspect_suite_name:</b> Human-readable name of the system inspection suite. Used in logging and reporting.
 <br>
-<b>sysinspect_phases:</b> List of phases executed by this role. Each phase corresponds to a logical block of diagnostics.<br>
-This structure is used to organize reports and debug output for better traceability.<br>
+<b>sysinspect_phases:</b> Nested list of inspection phases.<br>
+Each phase can contain one or more subphases with their own labels, descriptions, and conditions.<br>
 <br>
-<b>sysinspect_tool_name:</b> Technical identifier for this inspection system.<br>
-Used in output headers, reports, and external integrations to track tool identity.<br>
+<b>sysinspect_tool_info:</b> Information used for versioning and tool identity.<br>
 <br>
 <br>
 </details>
