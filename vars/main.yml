@@ -1,4 +1,4 @@
-#SPDX-License-Identifier: MIT-0
+# SPDX-License-Identifier: MIT-0
 ---
 # vars file for sysinspect (nested example for doc generator testing)
 
@@ -10,15 +10,30 @@ sysinspect_suite_name: "System Inspector v2.0"
 # title: Phases of system inspection
 # required: true
 # description-lines:
-# Nested list of inspection phases.
-# Each phase can contain one or more subphases with their own labels, descriptions, and conditions.
+#   - Nested list of inspection phases.
+#   - Each phase can contain one or more subphases with their own labels, descriptions, and conditions.
 sysinspect_phases:
   - id: hardware_check
+    # title: Phase ID
+    # required: true
+    # description: Unique identifier for the phase.
     label: "Hardware Metrics Collection"
+    # title: Phase label
+    # required: true
+    # description: Human-friendly name of the phase.
     description: "Collects hardware statistics including nested device checks."
+    # title: Subphases
+    # required: false
+    # description: List of substeps to run within this phase.
     subphases:
       - id: cpu_inspect
+        # title: Subphase ID
+        # required: true
+        # description: Identifier for this subphase.
         label: "CPU Details"
+        # title: Subphase label
+        # required: true
+        # description: Human-friendly name for the subphase.
         description: "Gathers model, core count, and usage per core."
 
       - id: mem_inspect
@@ -29,15 +44,24 @@ sysinspect_phases:
         label: "Disk Inspection"
         description: "Inspects mounted filesystems, usage, and I/O metrics."
         conditions:
-          min_disk_free_percent: 10  # Trigger alert if disk usage exceeds 90%
+          # title: Minimum disk free percent
+          # required: false
+          # description: Triggers an alert if free disk percentage drops below this value.
+          min_disk_free_percent: 10
 
   - id: os_info_check
     label: "Operating System Inspection"
     description: "Retrieves OS, kernel version, uptime."
     metadata:
+      # title: OS release files
+      # required: false
+      # description: List of files to parse for OS release info.
       os_release_files:
         - /etc/os-release
         - /etc/lsb-release
+      # title: Include hostname
+      # required: false
+      # description: Whether to include system hostname in output.
       include_hostname: true
 
   - id: network_check
@@ -45,7 +69,13 @@ sysinspect_phases:
     description: "Collects interface configs and ping tests."
     interfaces:
       - name: eth0
+        # title: Expected interface state
+        # required: true
+        # description: Desired operational state ("up" or "down").
         expected_state: "up"
+        # title: Ping test target
+        # required: false
+        # description: Optional IP or hostname to ping for connectivity test.
         test_ping: "8.8.8.8"
       - name: wlan0
         expected_state: "down"
@@ -56,7 +86,13 @@ sysinspect_phases:
     description: "Evaluates CPU and memory thresholds to trigger warnings."
     thresholds:
       cpu:
+        # title: CPU warning threshold
+        # required: true
+        # description: Percent usage that triggers a warning.
         warn: 75
+        # title: CPU critical threshold
+        # required: true
+        # description: Percent usage that triggers a critical alert.
         crit: 90
       memory:
         warn: 80
@@ -65,22 +101,40 @@ sysinspect_phases:
   - id: json_output
     label: "JSON Report Structuring"
     description: "Formats inspection output in JSON."
+    # title: Include metadata
+    # required: false
+    # description: Whether to embed metadata in the JSON output.
     include_metadata: true
+    # title: Sanitize keys
+    # required: false
+    # description: Convert keys to safe formats (e.g., snake_case, remove invalid chars).
     sanitize_keys: true
 
   - id: webhook_post
     label: "Webhook Result Push"
     description: "Sends report to external endpoint if configured."
     config:
+      # title: Enable webhook
+      # required: true
+      # description: Whether to send results to a webhook.
       enabled: true
+      # title: Retry count
+      # required: false
+      # description: Number of times to retry on failure.
       retry_count: 3
+      # title: Timeout seconds
+      # required: false
+      # description: Timeout for the webhook POST request.
       timeout_seconds: 5
+      # title: Webhook endpoint
+      # required: true
+      # description: URL to send results to (may be templated).
       endpoint: "{{ sysinspect_webhook_url | default('') }}"
 
 # title: Internal tool metadata
 # required: true
 # description-lines:
-# Information used for versioning and tool identity.
+#   - Information used for versioning and tool identity.
 sysinspect_tool_info:
   name: "InspectorCoreShell"
   version: "2.0.1"
