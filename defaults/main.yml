@@ -11,10 +11,89 @@ sysinspect_debug_mode: true
 
 # title: Test issue 83
 # required: false
-common_resolv_conf: |
+# description: Literal style – preserves newlines and indentation exactly
+common_resolv_conf_literal: |
   search domain.local
   nameserver 8.8.8.8
   nameserver 8.8.4.4
+
+# title: Test issue 83
+# required: false
+# description: Folded style – converts newlines to spaces
+common_resolv_conf_folded: >
+  search domain.local
+  nameserver 8.8.8.8
+  nameserver 8.8.4.4
+
+# title: Test issue 83
+# required: false
+# description: Literal style with indent indicator – preserves newlines; forces 2-space indentation (⚠️ may not be supported in Ansible)
+common_resolv_conf_literal_indent: |2
+    search domain.local
+    nameserver 8.8.8.8
+    nameserver 8.8.4.4
+
+# title: Test issue 83
+# required: false
+# description: Folded style with indent indicator – newlines become spaces; forces 2-space indentation (⚠️ may not be supported)
+common_resolv_conf_folded_indent: >2
+    search domain.local
+    nameserver 8.8.8.8
+    nameserver 8.8.4.4
+
+# title: Test issue 83
+# required: false
+# description: List of lines – one item per DNS line (best for iteration in templates)
+common_resolv_conf_list:
+  - search domain.local
+  - nameserver 8.8.8.8
+  - nameserver 8.8.4.4
+
+# title: Literal with chomping "keep"
+# required: false
+# description: Literal style – preserves all trailing newlines
+b: |+
+  hello
+  world
+
+
+# title: Literal with chomping "strip"
+# required: false
+# description: Literal style – strips all trailing newlines
+c: |-
+  hello
+  world
+
+# title: Literal with indent=4
+# required: false
+# description: Literal style with forced 4-space indentation (⚠️ non-portable)
+myval: |4
+    line1
+    line2
+
+# title: Literal with chomping "keep" and indent=2
+# required: false
+# description: Keeps newlines and enforces 2-space indent (⚠️ not safe in all parsers)
+val1: |+2
+    search domain.local
+    nameserver 8.8.8.8
+    nameserver 8.8.4.4
+
+# title: Literal with chomping "strip" and indent=4
+# required: false
+# description: Strips trailing newlines and forces 4-space indent (⚠️ avoid in Ansible)
+val2: |-4
+    search domain.local
+    nameserver 8.8.8.8
+    nameserver 8.8.4.4
+
+# title: Literal with indent=2 and chomping "keep"
+# required: false
+# description: Same as above; order of indicators doesn't matter (⚠️ not always supported)
+val3: |2+
+    search domain.local
+    nameserver 8.8.8.8
+    nameserver 8.8.4.4
 
 # title: Output path for system report
 # Unwanted: in_readme
