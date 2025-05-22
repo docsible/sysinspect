@@ -43,12 +43,14 @@ jobs:
             git clone https://github.com/docsible/docsible.git
             cd docsible
             git checkout main
+            echo "origin_label=(latest)" >> $GITHUB_ENV
           elif [[ -n "${{ github.event.inputs.docsible_pr_number }}" ]]; then
             echo "📦 Fetching PR #${{ github.event.inputs.docsible_pr_number }}"
             git clone https://github.com/docsible/docsible.git
             cd docsible
             git fetch origin pull/${{ github.event.inputs.docsible_pr_number }}/head:pr-${{ github.event.inputs.docsible_pr_number }}
             git checkout pr-${{ github.event.inputs.docsible_pr_number }}
+            echo "origin_label=(PR #${{ github.event.inputs.docsible_pr_number }})" >> $GITHUB_ENV
           else
             echo "❌ Provide a PR number or enable 'use_latest'."
             exit 1
@@ -59,6 +61,7 @@ jobs:
           echo "message=$(git log -1 --pretty=%s)" >> $GITHUB_ENV
 
           pip install .
+
 
       - name: Get Docsible version
         id: docsible_info
@@ -83,7 +86,7 @@ jobs:
           if git diff --cached --exit-code; then
             echo "✅ No documentation changes to commit"
           elif [ -n "${TOKEN}" ]; then
-            COMMIT_MSG="📘 update using docsible v${{ steps.docsible_info.outputs.version }}"
+            COMMIT_MSG="📘 update using docsible v${{ steps.docsible_info.outputs.version }} ${{ env.origin_label }}"
             COMMIT_MSG+=" (commit: ${{ steps.docsible_info.outputs.commit }})"
             COMMIT_MSG+=" - ${{ steps.docsible_info.outputs.message }}"
             git commit -m "${COMMIT_MSG}"
@@ -93,4 +96,3 @@ jobs:
           else
             echo "⚠️ Skipping push: TOKEN is not set"
           fi
-
