@@ -9,6 +9,13 @@
 # including the final assembled JSON report before writing or sending it.
 sysinspect_debug_mode: true
 
+# title: Test issue 83
+# required: false
+common_resolv_conf: |
+  search domain.local
+  nameserver 8.8.8.8
+  nameserver 8.8.4.4
+
 # title: Output path for system report
 # Unwanted: in_readme
 # Another unwanted content
