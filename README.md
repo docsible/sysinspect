@@ -121,13 +121,14 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
 | Var          | Type         | Value       |Required    | Title       |
 |--------------|--------------|-------------|------------|-------------|
 | [sysinspect_debug_mode](defaults/main.yml#L10)   | bool | `True` |    false  |  Enable debug mode for detailed output |
-| [sysinspect_report_output_path](defaults/main.yml#L17)   | str | `/tmp/system_report.json` |    true  |  Output path for system report |
-| [sysinspect_report_webhook_url](defaults/main.yml#L23)   | str |  |    false  |  Send report to webhook |
-| [sysinspect_collect_hardware](defaults/main.yml#L29)   | bool | `True` |    true  |  Collect CPU, memory, and disk usage |
-| [sysinspect_collect_os](defaults/main.yml#L35)   | bool | `True` |    true  |  Collect OS, kernel, and uptime info |
-| [sysinspect_collect_network](defaults/main.yml#L40)   | bool | `True` |    true  |  Collect network information (IP addresses) |
-| [sysinspect_cpu_alert_threshold](defaults/main.yml#L45)   | int | `90` |    false  |  CPU usage alert threshold |
-| [sysinspect_memory_alert_threshold](defaults/main.yml#L50)   | int | `90` |    false  |  Memory usage alert threshold |
+| [common_resolv_conf](defaults/main.yml#L14)   | str | `<multiline value>` |    false  |  Test issue 83 |
+| [sysinspect_report_output_path](defaults/main.yml#L24)   | str | `/tmp/system_report.json` |    true  |  Output path for system report |
+| [sysinspect_report_webhook_url](defaults/main.yml#L30)   | str |  |    false  |  Send report to webhook |
+| [sysinspect_collect_hardware](defaults/main.yml#L36)   | bool | `True` |    true  |  Collect CPU, memory, and disk usage |
+| [sysinspect_collect_os](defaults/main.yml#L42)   | bool | `True` |    true  |  Collect OS, kernel, and uptime info |
+| [sysinspect_collect_network](defaults/main.yml#L47)   | bool | `True` |    true  |  Collect network information (IP addresses) |
+| [sysinspect_cpu_alert_threshold](defaults/main.yml#L52)   | int | `90` |    false  |  CPU usage alert threshold |
+| [sysinspect_memory_alert_threshold](defaults/main.yml#L57)   | int | `90` |    false  |  Memory usage alert threshold |
 <details>
 <summary><b>🖇️ Full descriptions for vars in defaults/main.yml</b></summary>
 <br>
