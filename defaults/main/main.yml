@@ -1,0 +1,10 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for sysinspect
+
+# title: Enable debug mode for detailed output
+# required: false
+# description-lines:
+# If true, the role will display additional debug information at runtime,
+# including the final assembled JSON report before writing or sending it.
+sysinspect_debug_mode: true
