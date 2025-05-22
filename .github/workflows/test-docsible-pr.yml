@@ -34,41 +34,39 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install Docsible (PR or latest)
+      - name: Clone and install Docsible from PR or latest
         run: |
+          mkdir -p deps
+          cd deps
           if [[ "${{ github.event.inputs.use_latest }}" == "true" ]]; then
-            echo "📦 Installing latest Docsible from main branch"
-            pip install git+https://github.com/docsible/docsible.git@main
+            echo "📦 Cloning latest Docsible from main"
+            git clone https://github.com/docsible/docsible.git
+            cd docsible
+            git checkout main
           elif [[ -n "${{ github.event.inputs.docsible_pr_number }}" ]]; then
-            echo "📦 Installing Docsible from PR #${{ github.event.inputs.docsible_pr_number }}"
-            pip install git+https://github.com/docsible/docsible.git@refs/pull/${{ github.event.inputs.docsible_pr_number }}/head
+            echo "📦 Fetching PR #${{ github.event.inputs.docsible_pr_number }}"
+            git clone https://github.com/docsible/docsible.git
+            cd docsible
+            git fetch origin pull/${{ github.event.inputs.docsible_pr_number }}/head:pr-${{ github.event.inputs.docsible_pr_number }}
+            git checkout pr-${{ github.event.inputs.docsible_pr_number }}
           else
-            echo "❌ Please provide either a PR number or enable 'use_latest'."
+            echo "❌ Provide a PR number or enable 'use_latest'."
             exit 1
           fi
 
-      - name: Get Docsible version and Git commit
+          echo "✅ Commit: $(git rev-parse --short HEAD) - $(git log -1 --pretty=%s)"
+          echo "commit=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "message=$(git log -1 --pretty=%s)" >> $GITHUB_ENV
+
+          pip install .
+
+      - name: Get Docsible version
         id: docsible_info
         run: |
           VERSION=$(docsible --version | sed -E 's/.*version ([0-9.]+)/\1/')
-          DOCSIBLE_PATH=$(python -c "import docsible, os; print(os.path.dirname(docsible.__file__))")
-
-          COMMIT_HASH="unknown"
-          COMMIT_MESSAGE="unknown"
-
-          if [ -d "$DOCSIBLE_PATH/.git" ] || (cd "$DOCSIBLE_PATH" && git rev-parse --is-inside-work-tree > /dev/null 2>&1); then
-            pushd "$DOCSIBLE_PATH" > /dev/null
-            COMMIT_HASH=$(git rev-parse --short HEAD)
-            COMMIT_MESSAGE=$(git log -1 --pretty=%s)
-            popd > /dev/null
-          fi
-
-          echo "✅ Docsible version: $VERSION"
-          echo "✅ Commit: $COMMIT_HASH - $COMMIT_MESSAGE"
-
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "commit=$COMMIT_HASH" >> $GITHUB_OUTPUT
-          echo "message=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
+          echo "commit=${{ env.commit }}" >> $GITHUB_OUTPUT
+          echo "message=${{ env.message }}" >> $GITHUB_OUTPUT
 
       - name: Generate documentation for role
         run: |
@@ -85,7 +83,7 @@ jobs:
           if git diff --cached --exit-code; then
             echo "✅ No documentation changes to commit"
           elif [ -n "${TOKEN}" ]; then
-            COMMIT_MSG="📘 Doc update using docsible v${{ steps.docsible_info.outputs.version }}"
+            COMMIT_MSG="📘 update using docsible v${{ steps.docsible_info.outputs.version }}"
             COMMIT_MSG+=" (commit: ${{ steps.docsible_info.outputs.commit }})"
             COMMIT_MSG+=" - ${{ steps.docsible_info.outputs.message }}"
             git commit -m "${COMMIT_MSG}"
