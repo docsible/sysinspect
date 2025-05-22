@@ -121,33 +121,20 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
 | Var          | Type         | Value       |Required    | Title       |
 |--------------|--------------|-------------|------------|-------------|
 | [sysinspect_debug_mode](defaults/main.yml#L10)   | bool | `True` |    false  |  Enable debug mode for detailed output |
-| [common_resolv_conf_literal](defaults/main.yml#L15)   | str | `<multiline value>` |    false  |  Test issue 83 |
-| [common_resolv_conf_folded](defaults/main.yml#L23)   | str | `search domain.local nameserver 8.8.8.8 nameserver 8.8.4.4` |    false  |  Test issue 83 |
-| [common_resolv_conf_literal_indent](defaults/main.yml#L31)   | str | `search domain.local
-  nameserver 8.8.8.8
-  nameserver 8.8.4.4` |    false  |  Test issue 83 |
-| [common_resolv_conf_folded_indent](defaults/main.yml#L39)   | str | `search domain.local
-  nameserver 8.8.8.8
-  nameserver 8.8.4.4` |    false  |  Test issue 83 |
-| [common_resolv_conf_list](defaults/main.yml#L47)   | list | `[]` |    false  |  Test issue 83 |
-| [common_resolv_conf_list.**0**](defaults/main.yml#L48)   | str | `search domain.local` |    None  |  None |
-| [common_resolv_conf_list.**1**](defaults/main.yml#L49)   | str | `nameserver 8.8.8.8` |    None  |  None |
-| [common_resolv_conf_list.**2**](defaults/main.yml#L50)   | str | `nameserver 8.8.4.4` |    None  |  None |
-| [b](defaults/main.yml#L55)   | str | `hello
-world` |    false  |  Literal with chomping "keep" |
-| [c](defaults/main.yml#L63)   | str | `hello
-world` |    false  |  Literal with chomping "strip" |
-| [myval](defaults/main.yml#L70)   | str | `line1
-line2` |    false  |  Literal with indent=4 |
-| [val1](defaults/main.yml#L77)   | str | `search domain.local
-  nameserver 8.8.8.8
-  nameserver 8.8.4.4` |    false  |  Literal with chomping "keep" and indent=2 |
-| [val2](defaults/main.yml#L85)   | str | `search domain.local
-nameserver 8.8.8.8
-nameserver 8.8.4.4` |    false  |  Literal with chomping "strip" and indent=4 |
-| [val3](defaults/main.yml#L93)   | str | `search domain.local
-  nameserver 8.8.8.8
-  nameserver 8.8.4.4` |    false  |  Literal with indent=2 and chomping "keep" |
+| [sysinspect_common_resolv_conf_literal](defaults/main.yml#L15)   | str | `<multiline value: literal>` |    false  |  Test issue 83 |
+| [sysinspect_common_resolv_conf_folded](defaults/main.yml#L23)   | str | `<multiline value: folded>` |    false  |  Test issue 83 |
+| [sysinspect_common_resolv_conf_literal_indent](defaults/main.yml#L31)   | str | `<multiline value: literal_indent_2>` |    false  |  Test issue 83 |
+| [sysinspect_common_resolv_conf_folded_indent](defaults/main.yml#L39)   | str | `<multiline value: folded_indent_2>` |    false  |  Test issue 83 |
+| [sysinspect_common_resolv_conf_list](defaults/main.yml#L47)   | list | `[]` |    false  |  Test issue 83 |
+| [sysinspect_common_resolv_conf_list.**0**](defaults/main.yml#L48)   | str | `search domain.local` |    None  |  None |
+| [sysinspect_common_resolv_conf_list.**1**](defaults/main.yml#L49)   | str | `nameserver 8.8.8.8` |    None  |  None |
+| [sysinspect_common_resolv_conf_list.**2**](defaults/main.yml#L50)   | str | `nameserver 8.8.4.4` |    None  |  None |
+| [sysinspect_b](defaults/main.yml#L55)   | str | `<multiline value: literal_keep>` |    false  |  Literal with chomping "keep" |
+| [sysinspect_c](defaults/main.yml#L63)   | str | `<multiline value: literal_strip>` |    false  |  Literal with chomping "strip" |
+| [sysinspect_myval](defaults/main.yml#L70)   | str | `<multiline value: literal_indent_4>` |    false  |  Literal with indent=4 |
+| [sysinspect_val1](defaults/main.yml#L77)   | str | `<multiline value: literal_keep_indent_2>` |    false  |  Literal with chomping "keep" and indent=2 |
+| [sysinspect_val2](defaults/main.yml#L85)   | str | `<multiline value: literal_strip_indent_4>` |    false  |  Literal with chomping "strip" and indent=4 |
+| [sysinspect_val3](defaults/main.yml#L93)   | str | `<multiline value: literal_keep_indent_2>` |    false  |  Literal with indent=2 and chomping "keep" |
 | [sysinspect_report_output_path](defaults/main.yml#L103)   | str | `/tmp/system_report.json` |    true  |  Output path for system report |
 | [sysinspect_report_webhook_url](defaults/main.yml#L109)   | str |  |    false  |  Send report to webhook |
 | [sysinspect_collect_hardware](defaults/main.yml#L115)   | bool | `True` |    true  |  Collect CPU, memory, and disk usage |
@@ -174,17 +161,17 @@ nameserver 8.8.4.4` |    false  |  Literal with chomping "strip" and indent=4 |
 <th>Var</th><th>Description</th>
 <tr><td><b>sysinspect_debug_mode</b></td><td>If true, the role will display additional debug information at runtime,<br>
 including the final assembled JSON report before writing or sending it.<br></td></tr>
-<tr><td><b>common_resolv_conf_literal</b></td><td>Literal style – preserves newlines and indentation exactly</td></tr>
-<tr><td><b>common_resolv_conf_folded</b></td><td>Folded style – converts newlines to spaces</td></tr>
-<tr><td><b>common_resolv_conf_literal_indent</b></td><td>Literal style with indent indicator – preserves newlines; forces 2-space indentation (⚠️ may not be supported in Ansible)</td></tr>
-<tr><td><b>common_resolv_conf_folded_indent</b></td><td>Folded style with indent indicator – newlines become spaces; forces 2-space indentation (⚠️ may not be supported)</td></tr>
-<tr><td><b>common_resolv_conf_list</b></td><td>List of lines – one item per DNS line (best for iteration in templates)</td></tr>
-<tr><td><b>b</b></td><td>Literal style – preserves all trailing newlines</td></tr>
-<tr><td><b>c</b></td><td>Literal style – strips all trailing newlines</td></tr>
-<tr><td><b>myval</b></td><td>Literal style with forced 4-space indentation (⚠️ non-portable)</td></tr>
-<tr><td><b>val1</b></td><td>Keeps newlines and enforces 2-space indent (⚠️ not safe in all parsers)</td></tr>
-<tr><td><b>val2</b></td><td>Strips trailing newlines and forces 4-space indent (⚠️ avoid in Ansible)</td></tr>
-<tr><td><b>val3</b></td><td>Same as above; order of indicators doesn't matter (⚠️ not always supported)</td></tr>
+<tr><td><b>sysinspect_common_resolv_conf_literal</b></td><td>Literal style, preserves newlines and indentation exactly</td></tr>
+<tr><td><b>sysinspect_common_resolv_conf_folded</b></td><td>Folded style, converts newlines to spaces</td></tr>
+<tr><td><b>sysinspect_common_resolv_conf_literal_indent</b></td><td>Literal style with indent indicator, preserves newlines; forces 2-space indentation (⚠️ may not be supported in Ansible)</td></tr>
+<tr><td><b>sysinspect_common_resolv_conf_folded_indent</b></td><td>Folded style with indent indicator, newlines become spaces; forces 2-space indentation (⚠️ may not be supported)</td></tr>
+<tr><td><b>sysinspect_common_resolv_conf_list</b></td><td>List of lines, one item per DNS line (best for iteration in templates)</td></tr>
+<tr><td><b>sysinspect_b</b></td><td>Literal style, preserves all trailing newlines</td></tr>
+<tr><td><b>sysinspect_c</b></td><td>Literal style, strips all trailing newlines</td></tr>
+<tr><td><b>sysinspect_myval</b></td><td>Literal style with forced 4-space indentation (⚠️ non-portable)</td></tr>
+<tr><td><b>sysinspect_val1</b></td><td>Keeps newlines and enforces 2-space indent (⚠️ not safe in all parsers)</td></tr>
+<tr><td><b>sysinspect_val2</b></td><td>Strips trailing newlines and forces 4-space indent (⚠️ avoid in Ansible)</td></tr>
+<tr><td><b>sysinspect_val3</b></td><td>Same as above; order of indicators doesn't matter (⚠️ not always supported)</td></tr>
 <tr><td><b>sysinspect_report_output_path</b></td><td>Path where the final JSON report will be written.</td></tr>
 <tr><td><b>sysinspect_report_webhook_url</b></td><td>URL of the HTTP endpoint that will receive the report.</td></tr>
 <tr><td><b>sysinspect_collect_hardware</b></td><td>Enable or disable hardware metric collection.</td></tr>
