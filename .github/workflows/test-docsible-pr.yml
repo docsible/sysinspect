@@ -34,6 +34,19 @@ jobs:
         with:
           python-version: '3.10'
 
+      - name: Install Docsible (PR or latest)
+        run: |
+          if [[ "${{ github.event.inputs.use_latest }}" == "true" ]]; then
+            echo "📦 Installing latest Docsible from main branch"
+            pip install git+https://github.com/docsible/docsible.git@main
+          elif [[ -n "${{ github.event.inputs.docsible_pr_number }}" ]]; then
+            echo "📦 Installing Docsible from PR #${{ github.event.inputs.docsible_pr_number }}"
+            pip install git+https://github.com/docsible/docsible.git@refs/pull/${{ github.event.inputs.docsible_pr_number }}/head
+          else
+            echo "❌ Please provide either a PR number or enable 'use_latest'."
+            exit 1
+          fi
+
       - name: Get Docsible version and Git commit
         id: docsible_info
         run: |
@@ -56,19 +69,6 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "commit=$COMMIT_HASH" >> $GITHUB_OUTPUT
           echo "message=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
-
-      - name: Install Docsible (PR or latest)
-        run: |
-          if [[ "${{ github.event.inputs.use_latest }}" == "true" ]]; then
-            echo "📦 Installing latest Docsible from main branch"
-            pip install git+https://github.com/docsible/docsible.git@main
-          elif [[ -n "${{ github.event.inputs.docsible_pr_number }}" ]]; then
-            echo "📦 Installing Docsible from PR #${{ github.event.inputs.docsible_pr_number }}"
-            pip install git+https://github.com/docsible/docsible.git@refs/pull/${{ github.event.inputs.docsible_pr_number }}/head
-          else
-            echo "❌ Please provide either a PR number or enable 'use_latest'."
-            exit 1
-          fi
 
       - name: Generate documentation for role
         run: |
