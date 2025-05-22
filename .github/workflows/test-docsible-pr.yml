@@ -34,6 +34,29 @@ jobs:
         with:
           python-version: '3.10'
 
+      - name: Get Docsible version and Git commit
+        id: docsible_info
+        run: |
+          VERSION=$(docsible --version | sed -E 's/.*version ([0-9.]+)/\1/')
+          DOCSIBLE_PATH=$(python -c "import docsible, os; print(os.path.dirname(docsible.__file__))")
+
+          COMMIT_HASH="unknown"
+          COMMIT_MESSAGE="unknown"
+
+          if [ -d "$DOCSIBLE_PATH/.git" ] || (cd "$DOCSIBLE_PATH" && git rev-parse --is-inside-work-tree > /dev/null 2>&1); then
+            pushd "$DOCSIBLE_PATH" > /dev/null
+            COMMIT_HASH=$(git rev-parse --short HEAD)
+            COMMIT_MESSAGE=$(git log -1 --pretty=%s)
+            popd > /dev/null
+          fi
+
+          echo "✅ Docsible version: $VERSION"
+          echo "✅ Commit: $COMMIT_HASH - $COMMIT_MESSAGE"
+
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "commit=$COMMIT_HASH" >> $GITHUB_OUTPUT
+          echo "message=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
+
       - name: Install Docsible (PR or latest)
         run: |
           if [[ "${{ github.event.inputs.use_latest }}" == "true" ]]; then
@@ -58,16 +81,13 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add README.md
-          
+
           if git diff --cached --exit-code; then
             echo "✅ No documentation changes to commit"
           elif [ -n "${TOKEN}" ]; then
-            COMMIT_MSG="📘 Automated doc update from Docsible "
-            if [[ "true" == "true" ]]; then
-              COMMIT_MSG+="(latest)"
-            else
-              COMMIT_MSG+="PR #"
-            fi
+            COMMIT_MSG="📘 Doc update using docsible v${{ steps.docsible_info.outputs.version }}"
+            COMMIT_MSG+=" (commit: ${{ steps.docsible_info.outputs.commit }})"
+            COMMIT_MSG+=" - ${{ steps.docsible_info.outputs.message }}"
             git commit -m "${COMMIT_MSG}"
             BRANCH_NAME="main"
             echo "🔁 Pushing changes back to branch: ${BRANCH_NAME}"
