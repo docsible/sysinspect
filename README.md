@@ -167,6 +167,19 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
 | Var          | Type         | Value       |Required    | Title       |
 |--------------|--------------|-------------|------------|-------------|
 | [sysinspect_debug_mode](defaults/main/main.yml#L10)   | bool | `True` |    false  |  Enable debug mode for detailed output |
+| [my-var1-key1-reference](defaults/main/main.yml#L15)   | dict | `{}` |    false  |  Test issue 100 key1 |
+| [my-var1-key1-reference.**sub-key11**](defaults/main/main.yml#L16)   | str | `sub-key11-value` |    None  |  None |
+| [my-var1-key1-reference.**sub-key12**](defaults/main/main.yml#L17)   | str | `sub-key12-value` |    None  |  None |
+| [my-var1-key2-reference](defaults/main/main.yml#L22)   | dict | `{}` |    false  |  Test issue 100 key2 |
+| [my-var1-key2-reference.**sub-key21**](defaults/main/main.yml#L23)   | str | `sub-key11-value` |    None  |  None |
+| [my-var1-key2-reference.**sub-key22**](defaults/main/main.yml#L24)   | str | `sub-key12-value` |    None  |  None |
+| [my-var1-key3-reference](defaults/main/main.yml#L27)   | dict | `{}` |    None  |  None |
+| [my-var1-key3-reference.**sub-key31**](defaults/main/main.yml#L28)   | str | `sub-key31-value` |    None  |  None |
+| [my-var1-key3-reference.**sub-key32**](defaults/main/main.yml#L29)   | str | `sub-key32-value` |    None  |  None |
+| [my-var1](defaults/main/main.yml#L31)   | dict | `{}` |    None  |  None |
+| [my-var1.**key1**](defaults/main/main.yml#L32)   | str | `<multiline value: folded_strip>` |    None  |  None |
+| [my-var1.**key2**](defaults/main/main.yml#L34)   | str | `<multiline value: folded_strip>` |    None  |  None |
+| [my-var1.**key3**](defaults/main/main.yml#L36)   | str | `<multiline value: folded_strip>` |    None  |  None |
 <details>
 <summary><b>🖇️ Full descriptions for vars in defaults/main.yml</b></summary>
 <br>
@@ -214,6 +227,8 @@ including the final assembled JSON report before writing or sending it.<br></td>
 <th>Var</th><th>Description</th>
 <tr><td><b>sysinspect_debug_mode</b></td><td>If true, the role will display additional debug information at runtime,<br>
 including the final assembled JSON report before writing or sending it.<br></td></tr>
+<tr><td><b>my-var1-key1-reference</b></td><td>test description key2.</td></tr>
+<tr><td><b>my-var1-key2-reference</b></td><td>test description key2.</td></tr>
 </table>
 <br>
 </details>
