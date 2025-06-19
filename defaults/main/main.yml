@@ -8,3 +8,30 @@
 # If true, the role will display additional debug information at runtime,
 # including the final assembled JSON report before writing or sending it.
 sysinspect_debug_mode: true
+
+# title: Test issue 100 key1
+# required: false
+# description: test description key2.
+my-var1-key1-reference:
+  sub-key11: sub-key11-value
+  sub-key12: sub-key12-value
+
+# title: Test issue 100 key2
+# required: false
+# description: test description key2.
+my-var1-key2-reference:
+  sub-key21: sub-key11-value
+  sub-key22: sub-key12-value
+  
+# Bla bla..
+my-var1-key3-reference:
+  sub-key31: sub-key31-value
+  sub-key32: sub-key32-value
+
+my-var1:
+  key1: >-
+    {{ my-var1-key1-reference }}
+  key2: >-
+    {{ my-var1-key2-reference }}
+  key3: >-
+    {{ my-var1-key3-reference }}
