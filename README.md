@@ -120,28 +120,41 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
 
 | Var          | Type         | Value       |Required    | Title       |
 |--------------|--------------|-------------|------------|-------------|
-| [sysinspect_debug_mode](defaults/main.yml#L10)   | bool | `True` |    false  |  Enable debug mode for detailed output |
-| [sysinspect_common_resolv_conf_literal](defaults/main.yml#L15)   | str | `<multiline value: literal>` |    false  |  Test issue 83 |
-| [sysinspect_common_resolv_conf_folded](defaults/main.yml#L23)   | str | `<multiline value: folded>` |    false  |  Test issue 83 |
-| [sysinspect_common_resolv_conf_literal_indent](defaults/main.yml#L31)   | str | `<multiline value: literal_indent_2>` |    false  |  Test issue 83 |
-| [sysinspect_common_resolv_conf_folded_indent](defaults/main.yml#L39)   | str | `<multiline value: folded_indent_2>` |    false  |  Test issue 83 |
-| [sysinspect_common_resolv_conf_list](defaults/main.yml#L47)   | list | `[]` |    false  |  Test issue 83 |
-| [sysinspect_common_resolv_conf_list.**0**](defaults/main.yml#L48)   | str | `search domain.local` |    None  |  None |
-| [sysinspect_common_resolv_conf_list.**1**](defaults/main.yml#L49)   | str | `nameserver 8.8.8.8` |    None  |  None |
-| [sysinspect_common_resolv_conf_list.**2**](defaults/main.yml#L50)   | str | `nameserver 8.8.4.4` |    None  |  None |
-| [sysinspect_b](defaults/main.yml#L55)   | str | `<multiline value: literal_keep>` |    false  |  Literal with chomping "keep" |
-| [sysinspect_c](defaults/main.yml#L63)   | str | `<multiline value: literal_strip>` |    false  |  Literal with chomping "strip" |
-| [sysinspect_myval](defaults/main.yml#L70)   | str | `<multiline value: literal_indent_4>` |    false  |  Literal with indent=4 |
-| [sysinspect_val1](defaults/main.yml#L77)   | str | `<multiline value: literal_keep_indent_2>` |    false  |  Literal with chomping "keep" and indent=2 |
-| [sysinspect_val2](defaults/main.yml#L85)   | str | `<multiline value: literal_strip_indent_4>` |    false  |  Literal with chomping "strip" and indent=4 |
-| [sysinspect_val3](defaults/main.yml#L93)   | str | `<multiline value: literal_keep_indent_2>` |    false  |  Literal with indent=2 and chomping "keep" |
-| [sysinspect_report_output_path](defaults/main.yml#L103)   | str | `/tmp/system_report.json` |    true  |  Output path for system report |
-| [sysinspect_report_webhook_url](defaults/main.yml#L109)   | str |  |    false  |  Send report to webhook |
-| [sysinspect_collect_hardware](defaults/main.yml#L115)   | bool | `True` |    true  |  Collect CPU, memory, and disk usage |
-| [sysinspect_collect_os](defaults/main.yml#L121)   | bool | `True` |    true  |  Collect OS, kernel, and uptime info |
-| [sysinspect_collect_network](defaults/main.yml#L126)   | bool | `True` |    true  |  Collect network information (IP addresses) |
-| [sysinspect_cpu_alert_threshold](defaults/main.yml#L131)   | int | `90` |    false  |  CPU usage alert threshold |
-| [sysinspect_memory_alert_threshold](defaults/main.yml#L136)   | int | `90` |    false  |  Memory usage alert threshold |
+| [my-var1-key1-reference](defaults/main.yml#L8)   | dict | `{}` |    false  |  Test issue 100 key1 |
+| [my-var1-key1-reference.**sub-key11**](defaults/main.yml#L9)   | str | `sub-key11-value` |    None  |  None |
+| [my-var1-key1-reference.**sub-key12**](defaults/main.yml#L10)   | str | `sub-key12-value` |    None  |  None |
+| [my-var1-key2-reference](defaults/main.yml#L15)   | dict | `{}` |    false  |  Test issue 100 key2 |
+| [my-var1-key2-reference.**sub-key21**](defaults/main.yml#L16)   | str | `sub-key11-value` |    None  |  None |
+| [my-var1-key2-reference.**sub-key22**](defaults/main.yml#L17)   | str | `sub-key12-value` |    None  |  None |
+| [my-var1-key3-reference](defaults/main.yml#L20)   | dict | `{}` |    None  |  None |
+| [my-var1-key3-reference.**sub-key31**](defaults/main.yml#L21)   | str | `sub-key31-value` |    None  |  None |
+| [my-var1-key3-reference.**sub-key32**](defaults/main.yml#L22)   | str | `sub-key32-value` |    None  |  None |
+| [my-var1](defaults/main.yml#L24)   | dict | `{}` |    None  |  None |
+| [my-var1.**key1**](defaults/main.yml#L25)   | str | `<multiline value: folded_strip>` |    None  |  None |
+| [my-var1.**key2**](defaults/main.yml#L27)   | str | `<multiline value: folded_strip>` |    None  |  None |
+| [my-var1.**key3**](defaults/main.yml#L29)   | str | `<multiline value: folded_strip>` |    None  |  None |
+| [sysinspect_debug_mode](defaults/main.yml#L37)   | bool | `True` |    false  |  Enable debug mode for detailed output |
+| [sysinspect_common_resolv_conf_literal](defaults/main.yml#L42)   | str | `<multiline value: literal>` |    false  |  Test issue 83 |
+| [sysinspect_common_resolv_conf_folded](defaults/main.yml#L50)   | str | `<multiline value: folded>` |    false  |  Test issue 83 |
+| [sysinspect_common_resolv_conf_literal_indent](defaults/main.yml#L58)   | str | `<multiline value: literal_indent_2>` |    false  |  Test issue 83 |
+| [sysinspect_common_resolv_conf_folded_indent](defaults/main.yml#L66)   | str | `<multiline value: folded_indent_2>` |    false  |  Test issue 83 |
+| [sysinspect_common_resolv_conf_list](defaults/main.yml#L74)   | list | `[]` |    false  |  Test issue 83 |
+| [sysinspect_common_resolv_conf_list.**0**](defaults/main.yml#L75)   | str | `search domain.local` |    None  |  None |
+| [sysinspect_common_resolv_conf_list.**1**](defaults/main.yml#L76)   | str | `nameserver 8.8.8.8` |    None  |  None |
+| [sysinspect_common_resolv_conf_list.**2**](defaults/main.yml#L77)   | str | `nameserver 8.8.4.4` |    None  |  None |
+| [sysinspect_b](defaults/main.yml#L82)   | str | `<multiline value: literal_keep>` |    false  |  Literal with chomping "keep" |
+| [sysinspect_c](defaults/main.yml#L90)   | str | `<multiline value: literal_strip>` |    false  |  Literal with chomping "strip" |
+| [sysinspect_myval](defaults/main.yml#L97)   | str | `<multiline value: literal_indent_4>` |    false  |  Literal with indent=4 |
+| [sysinspect_val1](defaults/main.yml#L104)   | str | `<multiline value: literal_keep_indent_2>` |    false  |  Literal with chomping "keep" and indent=2 |
+| [sysinspect_val2](defaults/main.yml#L112)   | str | `<multiline value: literal_strip_indent_4>` |    false  |  Literal with chomping "strip" and indent=4 |
+| [sysinspect_val3](defaults/main.yml#L120)   | str | `<multiline value: literal_keep_indent_2>` |    false  |  Literal with indent=2 and chomping "keep" |
+| [sysinspect_report_output_path](defaults/main.yml#L130)   | str | `/tmp/system_report.json` |    true  |  Output path for system report |
+| [sysinspect_report_webhook_url](defaults/main.yml#L136)   | str |  |    false  |  Send report to webhook |
+| [sysinspect_collect_hardware](defaults/main.yml#L142)   | bool | `True` |    true  |  Collect CPU, memory, and disk usage |
+| [sysinspect_collect_os](defaults/main.yml#L148)   | bool | `True` |    true  |  Collect OS, kernel, and uptime info |
+| [sysinspect_collect_network](defaults/main.yml#L153)   | bool | `True` |    true  |  Collect network information (IP addresses) |
+| [sysinspect_cpu_alert_threshold](defaults/main.yml#L158)   | int | `90` |    false  |  CPU usage alert threshold |
+| [sysinspect_memory_alert_threshold](defaults/main.yml#L163)   | int | `90` |    false  |  Memory usage alert threshold |
 
 #### File: defaults/main/another_default_test.yml
 
@@ -159,6 +172,8 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
 <br>
 <table>
 <th>Var</th><th>Description</th>
+<tr><td><b>my-var1-key1-reference</b></td><td>test description key2.</td></tr>
+<tr><td><b>my-var1-key2-reference</b></td><td>test description key2.</td></tr>
 <tr><td><b>sysinspect_debug_mode</b></td><td>If true, the role will display additional debug information at runtime,<br>
 including the final assembled JSON report before writing or sending it.<br></td></tr>
 <tr><td><b>sysinspect_common_resolv_conf_literal</b></td><td>Literal style, preserves newlines and indentation exactly</td></tr>
