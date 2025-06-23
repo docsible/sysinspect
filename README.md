@@ -470,7 +470,10 @@ classDef rescue stroke:#665352,stroke-width:2px;
 #SPDX-License-Identifier: MIT-0
 ---
 - name: Sysinspect playbook
-  hosts: localhost
+  hosts: 
+    - localhost
+    - devhost
+    - prodhost
   remote_user: root
   roles:
     - ../sysinspect
@@ -479,7 +482,7 @@ classDef rescue stroke:#665352,stroke-width:2px;
 ## Playbook graph
 ```mermaid
 flowchart TD
-  localhost-->|Role| ___sysinspect[   sysinspect]
+  hosts[localhost, devhost, prodhost]-->|Role| ___sysinspect[   sysinspect]
 ```
 
 ## Author Information
