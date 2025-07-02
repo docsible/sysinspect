@@ -105,6 +105,174 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
   
   
 
+  - **myapp_int**
+    - **Required**: False
+    - **Type**: int
+    - **Default**: 42
+    - **Description**: ['The integer value, defaulting to 42.', 'This is a second paragraph.']
+  
+  
+  
+
+  - **myapp_str**
+    - **Required**: True
+    - **Type**: str
+    - **Default**: none
+    - **Description**: The string value
+  
+  
+  
+
+  - **myapp_list**
+    - **Required**: True
+    - **Type**: list
+    - **Default**: none
+    - **Description**: A list of string values.
+  
+  
+  
+
+  - **myapp_list_with_dicts**
+    - **Required**: False
+    - **Type**: list
+    - **Default**: [{'myapp_food_kind': 'meat', 'myapp_food_boiling_required': True, 'myapp_food_preparation_time': 60}, {'myapp_food_kind': 'fruits', 'myapp_food_preparation_time': 5}]
+    - **Description**: A list of dicts with a defined structure and with default a value.
+  
+  
+  
+    
+      
+        
+
+    - **myapp_food_kind**
+      - **Required**: false
+      - **Type**: 
+      - **Default**: none
+      - **Description**: No description provided
+  
+  
+  
+
+    - **myapp_food_boiling_required**
+      - **Required**: false
+      - **Type**: 
+      - **Default**: none
+      - **Description**: No description provided
+  
+  
+  
+
+    - **myapp_food_preparation_time**
+      - **Required**: false
+      - **Type**: 
+      - **Default**: none
+      - **Description**: No description provided
+  
+  
+  
+
+
+      
+    
+      
+        
+
+    - **myapp_food_kind**
+      - **Required**: false
+      - **Type**: 
+      - **Default**: none
+      - **Description**: No description provided
+  
+  
+  
+
+    - **myapp_food_preparation_time**
+      - **Required**: false
+      - **Type**: 
+      - **Default**: none
+      - **Description**: No description provided
+  
+  
+  
+
+
+      
+    
+  
+
+  - **myapp_dict_with_suboptions**
+    - **Required**: False
+    - **Type**: dict
+    - **Default**: {'myapp_host': 'bar.foo', 'myapp_exclude_host': True, 'myapp_path': '/etc/myapp'}
+    - **Description**: A dict with a defined structure and default values.
+  
+  
+  
+    
+
+    - **myapp_host**
+      - **Required**: True
+      - **Type**: str
+      - **Default**: none
+      - **Description**: A string value with a limited list of allowed choices.
+  
+        - **Choices**:
+    
+            - foo.bar
+    
+            - bar.foo
+    
+            - ansible.foo.bar
+    
+  
+  
+  
+
+    - **myapp_exclude_host**
+      - **Required**: True
+      - **Type**: bool
+      - **Default**: none
+      - **Description**: A boolean value.
+  
+  
+  
+
+    - **myapp_path**
+      - **Required**: True
+      - **Type**: path
+      - **Default**: none
+      - **Description**: A path value.
+  
+  
+  
+
+    - **original_name**
+      - **Required**: False
+      - **Type**: list
+      - **Default**: none
+      - **Description**: An optional list of string values.
+  
+  
+  
+
+
+  
+
+
+
+#### Key: alternate
+**Description**: ['This is the alternate entrypoint for the C(myapp) role.']
+
+
+  - **myapp_int**
+    - **Required**: False
+    - **Type**: int
+    - **Default**: 1024
+    - **Description**: The integer value, defaulting to 1024.
+  
+  
+  
+
 
 
 </details>
