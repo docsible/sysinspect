@@ -556,6 +556,26 @@ including the final assembled JSON report before writing or sending it.<br></td>
 
 
 
+### Graph for collect_metric.yml
+
+```mermaid
+flowchart TD
+Start
+classDef block stroke:#3498db,stroke-width:2px;
+classDef task stroke:#4b76bb,stroke-width:2px;
+classDef includeTasks stroke:#16a085,stroke-width:2px;
+classDef importTasks stroke:#34495e,stroke-width:2px;
+classDef includeRole stroke:#2980b9,stroke-width:2px;
+classDef importRole stroke:#699ba7,stroke-width:2px;
+classDef includeVars stroke:#8e44ad,stroke-width:2px;
+classDef rescue stroke:#665352,stroke-width:2px;
+
+  Start-->|Task| Run_metric_shell_command_for_metric_name0[run metric shell command for metric name<br>When: **metric collect**]:::task
+  Run_metric_shell_command_for_metric_name0-->|Task| Transfer_result_to_dynamic_register_var1[transfer result to dynamic register var<br>When: **metric collect**]:::task
+  Transfer_result_to_dynamic_register_var1-->End
+```
+
+
 ### Graph for main.yml
 
 ```mermaid
@@ -609,26 +629,6 @@ classDef rescue stroke:#665352,stroke-width:2px;
   Show_final_system_report_JSON__debug_mode_7-->|Task| Write_system_report_to_JSON_file8[write system report to json file]:::task
   Write_system_report_to_JSON_file8-->|Task| Send_report_to_webhook9[send report to webhook<br>When: **sysinspect report webhook url**]:::task
   Send_report_to_webhook9-->End
-```
-
-
-### Graph for collect_metric.yml
-
-```mermaid
-flowchart TD
-Start
-classDef block stroke:#3498db,stroke-width:2px;
-classDef task stroke:#4b76bb,stroke-width:2px;
-classDef includeTasks stroke:#16a085,stroke-width:2px;
-classDef importTasks stroke:#34495e,stroke-width:2px;
-classDef includeRole stroke:#2980b9,stroke-width:2px;
-classDef importRole stroke:#699ba7,stroke-width:2px;
-classDef includeVars stroke:#8e44ad,stroke-width:2px;
-classDef rescue stroke:#665352,stroke-width:2px;
-
-  Start-->|Task| Run_metric_shell_command_for_metric_name0[run metric shell command for metric name<br>When: **metric collect**]:::task
-  Run_metric_shell_command_for_metric_name0-->|Task| Transfer_result_to_dynamic_register_var1[transfer result to dynamic register var<br>When: **metric collect**]:::task
-  Transfer_result_to_dynamic_register_var1-->End
 ```
 
 
