@@ -21,16 +21,23 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
 <summary><b>🧩 Argument Specifications in meta/argument_specs</b></summary>
 
 #### Key: main
-**Description**: Collect system metrics (CPU, memory, disk, OS, network) and generate a structured JSON report with optional webhook integration.
 
+**Description**: 
+
+
+
+
+**Options**:
 
 
   - **sysinspect_debug_mode**
     - **Required**: False
     - **Type**: bool
     - **Default**: True
+  
     - **Description**: If true, enables debug output including the final JSON report printed to the terminal.
 
+  
   
   
   
@@ -39,8 +46,10 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
     - **Required**: False
     - **Type**: str
     - **Default**: /tmp/system_report.json
+  
     - **Description**: Path where the final JSON report will be written on the target host.
 
+  
   
   
   
@@ -49,8 +58,10 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
     - **Required**: False
     - **Type**: str
     - **Default**: 
+  
     - **Description**: Optional URL of a webhook endpoint to which the report will be POSTed.
 
+  
   
   
   
@@ -59,8 +70,10 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
     - **Required**: False
     - **Type**: bool
     - **Default**: True
+  
     - **Description**: Whether to collect CPU, memory, and disk metrics.
 
+  
   
   
   
@@ -69,8 +82,10 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
     - **Required**: False
     - **Type**: bool
     - **Default**: True
+  
     - **Description**: Whether to collect OS version, kernel, and system uptime.
 
+  
   
   
   
@@ -79,8 +94,10 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
     - **Required**: False
     - **Type**: bool
     - **Default**: True
+  
     - **Description**: Whether to collect IP address and basic network diagnostics.
 
+  
   
   
   
@@ -89,8 +106,10 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
     - **Required**: False
     - **Type**: int
     - **Default**: 90
+  
     - **Description**: CPU usage percentage above which a warning alert is triggered.
 
+  
   
   
   
@@ -99,8 +118,10 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
     - **Required**: False
     - **Type**: int
     - **Default**: 90
+  
     - **Description**: Memory usage percentage above which a warning alert is triggered.
 
+  
   
   
   
@@ -109,7 +130,13 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
     - **Required**: False
     - **Type**: int
     - **Default**: 42
-    - **Description**: ['The integer value, defaulting to 42.', 'This is a second paragraph.']
+    - **Description**: 
+  
+       - The integer value, defaulting to 42.
+  
+       - This is a second paragraph.
+  
+  
   
   
   
@@ -118,7 +145,9 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
     - **Required**: True
     - **Type**: str
     - **Default**: none
+  
     - **Description**: The string value
+  
   
   
   
@@ -127,7 +156,9 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
     - **Required**: True
     - **Type**: list
     - **Default**: none
+  
     - **Description**: A list of string values.
+  
   
   
   
@@ -136,7 +167,9 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
     - **Required**: False
     - **Type**: list
     - **Default**: [{'myapp_food_kind': 'meat', 'myapp_food_boiling_required': True, 'myapp_food_preparation_time': 60}, {'myapp_food_kind': 'fruits', 'myapp_food_preparation_time': 5}]
+  
     - **Description**: A list of dicts with a defined structure and with default a value.
+  
   
   
   
@@ -148,7 +181,9 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
       - **Required**: false
       - **Type**: 
       - **Default**: none
-      - **Description**: No description provided
+      - **Description**: 
+  
+  
   
   
   
@@ -157,7 +192,9 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
       - **Required**: false
       - **Type**: 
       - **Default**: none
-      - **Description**: No description provided
+      - **Description**: 
+  
+  
   
   
   
@@ -166,7 +203,9 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
       - **Required**: false
       - **Type**: 
       - **Default**: none
-      - **Description**: No description provided
+      - **Description**: 
+  
+  
   
   
   
@@ -181,7 +220,9 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
       - **Required**: false
       - **Type**: 
       - **Default**: none
-      - **Description**: No description provided
+      - **Description**: 
+  
+  
   
   
   
@@ -190,7 +231,9 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
       - **Required**: false
       - **Type**: 
       - **Default**: none
-      - **Description**: No description provided
+      - **Description**: 
+  
+  
   
   
   
@@ -204,7 +247,9 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
     - **Required**: False
     - **Type**: dict
     - **Default**: {'myapp_host': 'bar.foo', 'myapp_exclude_host': True, 'myapp_path': '/etc/myapp'}
+  
     - **Description**: A dict with a defined structure and default values.
+  
   
   
   
@@ -214,7 +259,9 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
       - **Required**: True
       - **Type**: str
       - **Default**: none
+  
       - **Description**: A string value with a limited list of allowed choices.
+  
   
         - **Choices**:
     
@@ -232,7 +279,9 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
       - **Required**: True
       - **Type**: bool
       - **Default**: none
+  
       - **Description**: A boolean value.
+  
   
   
   
@@ -241,7 +290,9 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
       - **Required**: True
       - **Type**: path
       - **Default**: none
+  
       - **Description**: A path value.
+  
   
   
   
@@ -250,28 +301,42 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
       - **Required**: False
       - **Type**: list
       - **Default**: none
+  
       - **Description**: An optional list of string values.
   
   
   
+  
 
 
   
 
 
 
+
 #### Key: alternate
-**Description**: ['This is the alternate entrypoint for the C(myapp) role.']
+
+**Description**: 
+
+  - This is the alternate entrypoint for the C(myapp) role.
+
+
+
+
+**Options**:
 
 
   - **myapp_int**
     - **Required**: False
     - **Type**: int
     - **Default**: 1024
+  
     - **Description**: The integer value, defaulting to 1024.
   
   
   
+  
+
 
 
 
