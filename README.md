@@ -9,7 +9,6 @@
 Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, and network). Designed for diagnostics, compliance reporting, monitoring integration, or automated system audits. Test url link [url to..](https://github.com/docsible/sysinspect/edit/main/meta/main.yml)
 
 
-
 | Field                | Value           |
 |--------------------- |-----------------|
 | Readme update        | 08/05/2025 |
@@ -25,8 +24,6 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
 **Description**: 
 
 
-
-
 **Options**:
 
 
@@ -37,7 +34,6 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
   
     - **Description**: If true, enables debug output including the final JSON report printed to the terminal.
 
-  
   
   
   
@@ -52,7 +48,6 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
   
   
   
-  
 
   - **sysinspect_report_webhook_url**
     - **Required**: False
@@ -61,7 +56,6 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
   
     - **Description**: Optional URL of a webhook endpoint to which the report will be POSTed.
 
-  
   
   
   
@@ -76,7 +70,6 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
   
   
   
-  
 
   - **sysinspect_collect_os**
     - **Required**: False
@@ -85,7 +78,6 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
   
     - **Description**: Whether to collect OS version, kernel, and system uptime.
 
-  
   
   
   
@@ -100,7 +92,6 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
   
   
   
-  
 
   - **sysinspect_cpu_alert_threshold**
     - **Required**: False
@@ -109,7 +100,6 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
   
     - **Description**: CPU usage percentage above which a warning alert is triggered.
 
-  
   
   
   
@@ -124,18 +114,14 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
   
   
   
-  
 
   - **myapp_int**
     - **Required**: False
     - **Type**: int
     - **Default**: 42
     - **Description**: 
-  
-       - The integer value, defaulting to 42.
-  
-       - This is a second paragraph.
-  
+   - The integer value, defaulting to 42.
+   - This is a second paragraph.
   
   
   
@@ -150,7 +136,6 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
   
   
   
-  
 
   - **myapp_list**
     - **Required**: True
@@ -158,7 +143,6 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
     - **Default**: none
   
     - **Description**: A list of string values.
-  
   
   
   
@@ -172,7 +156,6 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
   
   
   
-  
     
       
         
@@ -182,7 +165,6 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
       - **Type**: 
       - **Default**: none
       - **Description**: 
-  
   
   
   
@@ -197,14 +179,12 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
   
   
   
-  
 
     - **myapp_food_preparation_time**
       - **Required**: false
       - **Type**: 
       - **Default**: none
       - **Description**: 
-  
   
   
   
@@ -225,14 +205,12 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
   
   
   
-  
 
     - **myapp_food_preparation_time**
       - **Required**: false
       - **Type**: 
       - **Default**: none
       - **Description**: 
-  
   
   
   
@@ -252,7 +230,6 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
   
   
   
-  
     
 
     - **myapp_host**
@@ -261,7 +238,6 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
       - **Default**: none
   
       - **Description**: A string value with a limited list of allowed choices.
-  
   
         - **Choices**:
     
@@ -284,7 +260,6 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
   
   
   
-  
 
     - **myapp_path**
       - **Required**: True
@@ -292,7 +267,6 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
       - **Default**: none
   
       - **Description**: A path value.
-  
   
   
   
@@ -306,21 +280,16 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
   
   
   
-  
 
 
   
-
 
 
 
 #### Key: alternate
 
 **Description**: 
-
-  - This is the alternate entrypoint for the C(myapp) role.
-
-
+- This is the alternate entrypoint for the C(myapp) role.
 
 
 **Options**:
@@ -335,8 +304,6 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
   
   
   
-  
-
 
 
 
@@ -621,26 +588,6 @@ including the final assembled JSON report before writing or sending it.<br></td>
 
 
 
-### Graph for collect_metric.yml
-
-```mermaid
-flowchart TD
-Start
-classDef block stroke:#3498db,stroke-width:2px;
-classDef task stroke:#4b76bb,stroke-width:2px;
-classDef includeTasks stroke:#16a085,stroke-width:2px;
-classDef importTasks stroke:#34495e,stroke-width:2px;
-classDef includeRole stroke:#2980b9,stroke-width:2px;
-classDef importRole stroke:#699ba7,stroke-width:2px;
-classDef includeVars stroke:#8e44ad,stroke-width:2px;
-classDef rescue stroke:#665352,stroke-width:2px;
-
-  Start-->|Task| Run_metric_shell_command_for_metric_name0[run metric shell command for metric name<br>When: **metric collect**]:::task
-  Run_metric_shell_command_for_metric_name0-->|Task| Transfer_result_to_dynamic_register_var1[transfer result to dynamic register var<br>When: **metric collect**]:::task
-  Transfer_result_to_dynamic_register_var1-->End
-```
-
-
 ### Graph for main.yml
 
 ```mermaid
@@ -694,6 +641,26 @@ classDef rescue stroke:#665352,stroke-width:2px;
   Show_final_system_report_JSON__debug_mode_7-->|Task| Write_system_report_to_JSON_file8[write system report to json file]:::task
   Write_system_report_to_JSON_file8-->|Task| Send_report_to_webhook9[send report to webhook<br>When: **sysinspect report webhook url**]:::task
   Send_report_to_webhook9-->End
+```
+
+
+### Graph for collect_metric.yml
+
+```mermaid
+flowchart TD
+Start
+classDef block stroke:#3498db,stroke-width:2px;
+classDef task stroke:#4b76bb,stroke-width:2px;
+classDef includeTasks stroke:#16a085,stroke-width:2px;
+classDef importTasks stroke:#34495e,stroke-width:2px;
+classDef includeRole stroke:#2980b9,stroke-width:2px;
+classDef importRole stroke:#699ba7,stroke-width:2px;
+classDef includeVars stroke:#8e44ad,stroke-width:2px;
+classDef rescue stroke:#665352,stroke-width:2px;
+
+  Start-->|Task| Run_metric_shell_command_for_metric_name0[run metric shell command for metric name<br>When: **metric collect**]:::task
+  Run_metric_shell_command_for_metric_name0-->|Task| Transfer_result_to_dynamic_register_var1[transfer result to dynamic register var<br>When: **metric collect**]:::task
+  Transfer_result_to_dynamic_register_var1-->End
 ```
 
 
