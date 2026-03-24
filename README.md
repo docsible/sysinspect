@@ -6,7 +6,7 @@
 
 
 
-Ansible role for collecting system metrics (CPU, memory, disk, OS, and network). Designed for diagnostics, compliance reporting, monitoring integration, or automated system audits. Test url link [url to..](https://github.com/docsible/sysinspect/edit/main/meta/main.yml)
+Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, and network). Designed for diagnostics, compliance reporting, monitoring integration, or automated system audits. Test url link [url to..](https://github.com/docsible/sysinspect/edit/main/meta/main.yml)
 
 
 | Field                | Value           |
@@ -320,95 +320,66 @@ Ansible role for collecting system metrics (CPU, memory, disk, OS, and network).
 
 | Var          | Type         | Value       |Required    | Title       |
 |--------------|--------------|-------------|------------|-------------|
-
-| [my-var1-key1-reference](defaults/main.yml#L8)   | dict | {<br>&nbsp;&nbsp;"sub-key11": "sub-key11-value",<br>&nbsp;&nbsp;"sub-key12": "sub-key12-value"<br>} |    false  |  Test issue 100 key1 |
-
-
-
-| [my-var1-key2-reference](defaults/main.yml#L15)   | dict | {<br>&nbsp;&nbsp;"sub-key21": "sub-key11-value",<br>&nbsp;&nbsp;"sub-key22": "sub-key12-value"<br>} |    false  |  Test issue 100 key2 |
-
-
-
-| [my-var1-key3-reference](defaults/main.yml#L20)   | dict | {<br>&nbsp;&nbsp;"sub-key31": "sub-key31-value",<br>&nbsp;&nbsp;"sub-key32": "sub-key32-value"<br>} |    None  |  None |
-
-
-
-| [my-var1](defaults/main.yml#L24)   | dict | {<br>&nbsp;&nbsp;"key1": "{{ my-var1-key1-reference }}",<br>&nbsp;&nbsp;"key2": "{{ my-var1-key2-reference }}",<br>&nbsp;&nbsp;"key3": "{{ my-var1-key3-reference }}"<br>} |    None  |  None |
-
-
-
-
+| [my-var1-key1-reference](defaults/main.yml#L8)   | dict | `{}` |    false  |  Test issue 100 key1 |
+| [my-var1-key1-reference.**sub-key11**](defaults/main.yml#L9)   | str | `sub-key11-value` |    None  |  None |
+| [my-var1-key1-reference.**sub-key12**](defaults/main.yml#L10)   | str | `sub-key12-value` |    None  |  None |
+| [my-var1-key2-reference](defaults/main.yml#L15)   | dict | `{}` |    false  |  Test issue 100 key2 |
+| [my-var1-key2-reference.**sub-key21**](defaults/main.yml#L16)   | str | `sub-key11-value` |    None  |  None |
+| [my-var1-key2-reference.**sub-key22**](defaults/main.yml#L17)   | str | `sub-key12-value` |    None  |  None |
+| [my-var1-key3-reference](defaults/main.yml#L20)   | dict | `{}` |    None  |  None |
+| [my-var1-key3-reference.**sub-key31**](defaults/main.yml#L21)   | str | `sub-key31-value` |    None  |  None |
+| [my-var1-key3-reference.**sub-key32**](defaults/main.yml#L22)   | str | `sub-key32-value` |    None  |  None |
+| [my-var1](defaults/main.yml#L24)   | dict | `{}` |    None  |  None |
+| [my-var1.**key1**](defaults/main.yml#L25)   | str | `<multiline value: folded_strip>` |    None  |  None |
+| [my-var1.**key2**](defaults/main.yml#L27)   | str | `<multiline value: folded_strip>` |    None  |  None |
+| [my-var1.**key3**](defaults/main.yml#L29)   | str | `<multiline value: folded_strip>` |    None  |  None |
 | [sysinspect_debug_mode](defaults/main.yml#L37)   | bool | `True` |    false  |  Enable debug mode for detailed output |
-
 | [sysinspect_common_resolv_conf_literal](defaults/main.yml#L42)   | str | `<multiline value: literal>` |    false  |  Test issue 83 |
-
 | [sysinspect_common_resolv_conf_folded](defaults/main.yml#L50)   | str | `<multiline value: folded>` |    false  |  Test issue 83 |
-
 | [sysinspect_common_resolv_conf_literal_indent](defaults/main.yml#L58)   | str | `<multiline value: literal_indent_2>` |    false  |  Test issue 83 |
-
 | [sysinspect_common_resolv_conf_folded_indent](defaults/main.yml#L66)   | str | `<multiline value: folded_indent_2>` |    false  |  Test issue 83 |
-
-| [sysinspect_common_resolv_conf_list](defaults/main.yml#L74)   | list | [<br>&nbsp;&nbsp;"search domain.local",<br>&nbsp;&nbsp;"nameserver 8.8.8.8",<br>&nbsp;&nbsp;"nameserver 8.8.4.4"<br>] |    false  |  Test issue 83 |
-
-
-
-
+| [sysinspect_common_resolv_conf_list](defaults/main.yml#L74)   | list | `[]` |    false  |  Test issue 83 |
+| [sysinspect_common_resolv_conf_list.**0**](defaults/main.yml#L75)   | str | `search domain.local` |    None  |  None |
+| [sysinspect_common_resolv_conf_list.**1**](defaults/main.yml#L76)   | str | `nameserver 8.8.8.8` |    None  |  None |
+| [sysinspect_common_resolv_conf_list.**2**](defaults/main.yml#L77)   | str | `nameserver 8.8.4.4` |    None  |  None |
 | [sysinspect_b](defaults/main.yml#L82)   | str | `<multiline value: literal_keep>` |    false  |  Literal with chomping "keep" |
-
 | [sysinspect_c](defaults/main.yml#L90)   | str | `<multiline value: literal_strip>` |    false  |  Literal with chomping "strip" |
-
 | [sysinspect_myval](defaults/main.yml#L97)   | str | `<multiline value: literal_indent_4>` |    false  |  Literal with indent=4 |
-
 | [sysinspect_val1](defaults/main.yml#L104)   | str | `<multiline value: literal_keep_indent_2>` |    false  |  Literal with chomping "keep" and indent=2 |
-
 | [sysinspect_val2](defaults/main.yml#L112)   | str | `<multiline value: literal_strip_indent_4>` |    false  |  Literal with chomping "strip" and indent=4 |
-
 | [sysinspect_val3](defaults/main.yml#L120)   | str | `<multiline value: literal_keep_indent_2>` |    false  |  Literal with indent=2 and chomping "keep" |
-
 | [sysinspect_report_output_path](defaults/main.yml#L130)   | str | `/tmp/system_report.json` |    true  |  Output path for system report |
-
 | [sysinspect_report_webhook_url](defaults/main.yml#L136)   | str |  |    false  |  Send report to webhook |
-
 | [sysinspect_collect_hardware](defaults/main.yml#L142)   | bool | `True` |    true  |  Collect CPU, memory, and disk usage |
-
 | [sysinspect_collect_os](defaults/main.yml#L148)   | bool | `True` |    true  |  Collect OS, kernel, and uptime info |
-
 | [sysinspect_collect_network](defaults/main.yml#L153)   | bool | `True` |    true  |  Collect network information (IP addresses) |
-
 | [sysinspect_cpu_alert_threshold](defaults/main.yml#L158)   | int | `90` |    false  |  CPU usage alert threshold |
-
 | [sysinspect_memory_alert_threshold](defaults/main.yml#L163)   | int | `90` |    false  |  Memory usage alert threshold |
 
 #### File: defaults/main/another_default_test.yml
 
 | Var          | Type         | Value       |Required    | Title       |
 |--------------|--------------|-------------|------------|-------------|
-
 | [sysinspect_debug_mode](defaults/main/another_default_test.yml#L10)   | bool | `True` |    false  |  Enable debug mode for detailed output |
 
 #### File: defaults/main/main.yml
 
 | Var          | Type         | Value       |Required    | Title       |
 |--------------|--------------|-------------|------------|-------------|
-
 | [sysinspect_debug_mode](defaults/main/main.yml#L10)   | bool | `True` |    false  |  Enable debug mode for detailed output |
-
-| [my-var1-key1-reference](defaults/main/main.yml#L15)   | dict | {<br>&nbsp;&nbsp;"sub-key11": "sub-key11-value",<br>&nbsp;&nbsp;"sub-key12": "sub-key12-value"<br>} |    false  |  Test issue 100 key1 |
-
-
-
-| [my-var1-key2-reference](defaults/main/main.yml#L22)   | dict | {<br>&nbsp;&nbsp;"sub-key21": "sub-key11-value",<br>&nbsp;&nbsp;"sub-key22": "sub-key12-value"<br>} |    false  |  Test issue 100 key2 |
-
-
-
-| [my-var1-key3-reference](defaults/main/main.yml#L27)   | dict | {<br>&nbsp;&nbsp;"sub-key31": "sub-key31-value",<br>&nbsp;&nbsp;"sub-key32": "sub-key32-value"<br>} |    None  |  None |
-
-
-
-| [my-var1](defaults/main/main.yml#L31)   | dict | {<br>&nbsp;&nbsp;"key1": "{{ my-var1-key1-reference }}",<br>&nbsp;&nbsp;"key2": "{{ my-var1-key2-reference }}",<br>&nbsp;&nbsp;"key3": "{{ my-var1-key3-reference }}"<br>} |    None  |  None |
-
-
-
+| [my-var1-key1-reference](defaults/main/main.yml#L15)   | dict | `{}` |    false  |  Test issue 100 key1 |
+| [my-var1-key1-reference.**sub-key11**](defaults/main/main.yml#L16)   | str | `sub-key11-value` |    None  |  None |
+| [my-var1-key1-reference.**sub-key12**](defaults/main/main.yml#L17)   | str | `sub-key12-value` |    None  |  None |
+| [my-var1-key2-reference](defaults/main/main.yml#L22)   | dict | `{}` |    false  |  Test issue 100 key2 |
+| [my-var1-key2-reference.**sub-key21**](defaults/main/main.yml#L23)   | str | `sub-key11-value` |    None  |  None |
+| [my-var1-key2-reference.**sub-key22**](defaults/main/main.yml#L24)   | str | `sub-key12-value` |    None  |  None |
+| [my-var1-key3-reference](defaults/main/main.yml#L27)   | dict | `{}` |    None  |  None |
+| [my-var1-key3-reference.**sub-key31**](defaults/main/main.yml#L28)   | str | `sub-key31-value` |    None  |  None |
+| [my-var1-key3-reference.**sub-key32**](defaults/main/main.yml#L29)   | str | `sub-key32-value` |    None  |  None |
+| [my-var1](defaults/main/main.yml#L31)   | dict | `{}` |    None  |  None |
+| [my-var1.**key1**](defaults/main/main.yml#L32)   | str | `<multiline value: folded_strip>` |    None  |  None |
+| [my-var1.**key2**](defaults/main/main.yml#L34)   | str | `<multiline value: folded_strip>` |    None  |  None |
+| [my-var1.**key3**](defaults/main/main.yml#L36)   | str | `<multiline value: folded_strip>` |    None  |  None |
 <details>
 <summary><b>🖇️ Full descriptions for vars in defaults/main.yml</b></summary>
 <br>
@@ -470,77 +441,79 @@ including the final assembled JSON report before writing or sending it.<br></td>
 
 | Var          | Type         | Value       |Required    | Title       |
 |--------------|--------------|-------------|------------|-------------|
-
 | [sysinspect_suite_name](vars/main.yml#L8)   | str | `System Inspector v2.0` |    true  |  Name of the diagnostic suite |
-
-| [sysinspect_phases](vars/main.yml#L15)   | list | [<br>&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;"description": "Collects hardware statistics including nested device checks.",<br>&nbsp;&nbsp;&nbsp;&nbsp;"id": "hardware_check",<br>&nbsp;&nbsp;&nbsp;&nbsp;"label": "Hardware Metrics Collection",<br>&nbsp;&nbsp;&nbsp;&nbsp;"subphases": [<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description": "Gathers model, core count, and usage per core.",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"id": "cpu_inspect",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"label": "CPU Details"<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description": "Retrieves total, used, and free memory.",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"id": "mem_inspect",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"label": "Memory Details"<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"conditions": {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"min_disk_free_percent": 10<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description": "Inspects mounted filesystems, usage, and I/O metrics.",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"id": "disk_inspect",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"label": "Disk Inspection"<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;]<br>&nbsp;&nbsp;},<br>&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;"description": "Retrieves OS, kernel version, uptime.",<br>&nbsp;&nbsp;&nbsp;&nbsp;"id": "os_info_check",<br>&nbsp;&nbsp;&nbsp;&nbsp;"label": "Operating System Inspection",<br>&nbsp;&nbsp;&nbsp;&nbsp;"metadata": {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"include_hostname": true,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"os_release_files": [<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/etc/os-release",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/etc/lsb-release"<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]<br>&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;},<br>&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;"description": "Collects interface configs and ping tests.",<br>&nbsp;&nbsp;&nbsp;&nbsp;"id": "network_check",<br>&nbsp;&nbsp;&nbsp;&nbsp;"interfaces": [<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"expected_state": "up",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name": "eth0",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"test_ping": "8.8.8.8"<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"expected_state": "down",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name": "wlan0",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"test_ping": null<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;],<br>&nbsp;&nbsp;&nbsp;&nbsp;"label": "Network Interfaces"<br>&nbsp;&nbsp;},<br>&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;"description": "Evaluates CPU and memory thresholds to trigger warnings.",<br>&nbsp;&nbsp;&nbsp;&nbsp;"id": "alerting",<br>&nbsp;&nbsp;&nbsp;&nbsp;"label": "Threshold \u0026 Alert Logic",<br>&nbsp;&nbsp;&nbsp;&nbsp;"thresholds": {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"cpu": {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"crit": 90,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"warn": 75<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"memory": {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"crit": 95,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"warn": 80<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;},<br>&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;"description": "Formats inspection output in JSON.",<br>&nbsp;&nbsp;&nbsp;&nbsp;"id": "json_output",<br>&nbsp;&nbsp;&nbsp;&nbsp;"include_metadata": true,<br>&nbsp;&nbsp;&nbsp;&nbsp;"label": "JSON Report Structuring",<br>&nbsp;&nbsp;&nbsp;&nbsp;"sanitize_keys": true<br>&nbsp;&nbsp;},<br>&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;"config": {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"enabled": true,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"endpoint": "{{ sysinspect_webhook_url | default(\u0027\u0027) }}",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"retry_count": 3,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"timeout_seconds": 5<br>&nbsp;&nbsp;&nbsp;&nbsp;},<br>&nbsp;&nbsp;&nbsp;&nbsp;"description": "Sends report to external endpoint if configured.",<br>&nbsp;&nbsp;&nbsp;&nbsp;"id": "webhook_post",<br>&nbsp;&nbsp;&nbsp;&nbsp;"label": "Webhook Result Push"<br>&nbsp;&nbsp;}<br>] |    true  |  Phases of system inspection |
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-| [sysinspect_tool_info](vars/main.yml#L138)   | dict | {<br>&nbsp;&nbsp;"license": "MIT-0",<br>&nbsp;&nbsp;"name": "InspectorCoreShell",<br>&nbsp;&nbsp;"version": "2.0.1"<br>} |    true  |  Internal tool metadata |
-
-
-
+| [sysinspect_phases](vars/main.yml#L15)   | list | `[]` |    true  |  Phases of system inspection |
+| [sysinspect_phases.**0**](vars/main.yml#L16)   | dict | `{}` |    None  |  None |
+| [sysinspect_phases.0.**id**](vars/main.yml#L16)   | str | `hardware_check` |    None  |  None |
+| [sysinspect_phases.0.**label**](vars/main.yml#L20)   | str | `Hardware Metrics Collection` |    true  |  Phase ID |
+| [sysinspect_phases.0.**description**](vars/main.yml#L24)   | str | `Collects hardware statistics including nested device checks.` |    true  |  Phase label |
+| [sysinspect_phases.0.**subphases**](vars/main.yml#L28)   | list | `[]` |    false  |  Subphases |
+| [sysinspect_phases.0.subphases.**0**](vars/main.yml#L29)   | dict | `{}` |    None  |  None |
+| [sysinspect_phases.0.subphases.0.**id**](vars/main.yml#L29)   | str | `cpu_inspect` |    None  |  None |
+| [sysinspect_phases.0.subphases.0.**label**](vars/main.yml#L33)   | str | `CPU Details` |    true  |  Subphase ID |
+| [sysinspect_phases.0.subphases.0.**description**](vars/main.yml#L37)   | str | `Gathers model, core count, and usage per core.` |    true  |  Subphase label |
+| [sysinspect_phases.0.subphases.**1**](vars/main.yml#L39)   | dict | `{}` |    None  |  None |
+| [sysinspect_phases.0.subphases.1.**id**](vars/main.yml#L39)   | str | `mem_inspect` |    None  |  None |
+| [sysinspect_phases.0.subphases.1.**label**](vars/main.yml#L40)   | str | `Memory Details` |    None  |  None |
+| [sysinspect_phases.0.subphases.1.**description**](vars/main.yml#L41)   | str | `Retrieves total, used, and free memory.` |    None  |  None |
+| [sysinspect_phases.0.subphases.**2**](vars/main.yml#L43)   | dict | `{}` |    None  |  None |
+| [sysinspect_phases.0.subphases.2.**id**](vars/main.yml#L43)   | str | `disk_inspect` |    None  |  None |
+| [sysinspect_phases.0.subphases.2.**label**](vars/main.yml#L44)   | str | `Disk Inspection` |    None  |  None |
+| [sysinspect_phases.0.subphases.2.**description**](vars/main.yml#L45)   | str | `Inspects mounted filesystems, usage, and I/O metrics.` |    None  |  None |
+| [sysinspect_phases.0.subphases.2.**conditions**](vars/main.yml#L46)   | dict | `{}` |    None  |  None |
+| [sysinspect_phases.0.subphases.2.conditions.**min_disk_free_percent**](vars/main.yml#L50)   | int | `10` |    false  |  Minimum disk free percent |
+| [sysinspect_phases.**1**](vars/main.yml#L52)   | dict | `{}` |    None  |  None |
+| [sysinspect_phases.1.**id**](vars/main.yml#L52)   | str | `os_info_check` |    None  |  None |
+| [sysinspect_phases.1.**label**](vars/main.yml#L53)   | str | `Operating System Inspection` |    None  |  None |
+| [sysinspect_phases.1.**description**](vars/main.yml#L54)   | str | `Retrieves OS, kernel version, uptime.` |    None  |  None |
+| [sysinspect_phases.1.**metadata**](vars/main.yml#L55)   | dict | `{}` |    None  |  None |
+| [sysinspect_phases.1.metadata.**os_release_files**](vars/main.yml#L59)   | list | `[]` |    false  |  OS release files |
+| [sysinspect_phases.1.metadata.os_release_files.**0**](vars/main.yml#L60)   | str | `/etc/os-release` |    None  |  None |
+| [sysinspect_phases.1.metadata.os_release_files.**1**](vars/main.yml#L61)   | str | `/etc/lsb-release` |    None  |  None |
+| [sysinspect_phases.1.metadata.**include_hostname**](vars/main.yml#L65)   | bool | `True` |    false  |  Include hostname |
+| [sysinspect_phases.**2**](vars/main.yml#L67)   | dict | `{}` |    None  |  None |
+| [sysinspect_phases.2.**id**](vars/main.yml#L67)   | str | `network_check` |    None  |  None |
+| [sysinspect_phases.2.**label**](vars/main.yml#L68)   | str | `Network Interfaces` |    None  |  None |
+| [sysinspect_phases.2.**description**](vars/main.yml#L69)   | str | `Collects interface configs and ping tests.` |    None  |  None |
+| [sysinspect_phases.2.**interfaces**](vars/main.yml#L70)   | list | `[]` |    None  |  None |
+| [sysinspect_phases.2.interfaces.**0**](vars/main.yml#L71)   | dict | `{}` |    None  |  None |
+| [sysinspect_phases.2.interfaces.0.**name**](vars/main.yml#L71)   | str | `eth0` |    None  |  None |
+| [sysinspect_phases.2.interfaces.0.**expected_state**](vars/main.yml#L75)   | str | `up` |    true  |  Expected interface state |
+| [sysinspect_phases.2.interfaces.0.**test_ping**](vars/main.yml#L79)   | str | `8.8.8.8` |    false  |  Ping test target |
+| [sysinspect_phases.2.interfaces.**1**](vars/main.yml#L80)   | dict | `{}` |    None  |  None |
+| [sysinspect_phases.2.interfaces.1.**name**](vars/main.yml#L80)   | str | `wlan0` |    None  |  None |
+| [sysinspect_phases.2.interfaces.1.**expected_state**](vars/main.yml#L81)   | str | `down` |    None  |  None |
+| [sysinspect_phases.2.interfaces.1.**test_ping**](vars/main.yml#L82)   | NoneType | `None` |    None  |  None |
+| [sysinspect_phases.**3**](vars/main.yml#L84)   | dict | `{}` |    None  |  None |
+| [sysinspect_phases.3.**id**](vars/main.yml#L84)   | str | `alerting` |    None  |  None |
+| [sysinspect_phases.3.**label**](vars/main.yml#L85)   | str | `Threshold & Alert Logic` |    None  |  None |
+| [sysinspect_phases.3.**description**](vars/main.yml#L86)   | str | `Evaluates CPU and memory thresholds to trigger warnings.` |    None  |  None |
+| [sysinspect_phases.3.**thresholds**](vars/main.yml#L87)   | dict | `{}` |    None  |  None |
+| [sysinspect_phases.3.thresholds.**cpu**](vars/main.yml#L88)   | dict | `{}` |    None  |  None |
+| [sysinspect_phases.3.thresholds.cpu.**warn**](vars/main.yml#L92)   | int | `75` |    true  |  CPU warning threshold |
+| [sysinspect_phases.3.thresholds.cpu.**crit**](vars/main.yml#L96)   | int | `90` |    true  |  CPU critical threshold |
+| [sysinspect_phases.3.thresholds.**memory**](vars/main.yml#L97)   | dict | `{}` |    None  |  None |
+| [sysinspect_phases.3.thresholds.memory.**warn**](vars/main.yml#L98)   | int | `80` |    None  |  None |
+| [sysinspect_phases.3.thresholds.memory.**crit**](vars/main.yml#L99)   | int | `95` |    None  |  None |
+| [sysinspect_phases.**4**](vars/main.yml#L101)   | dict | `{}` |    None  |  None |
+| [sysinspect_phases.4.**id**](vars/main.yml#L101)   | str | `json_output` |    None  |  None |
+| [sysinspect_phases.4.**label**](vars/main.yml#L102)   | str | `JSON Report Structuring` |    None  |  None |
+| [sysinspect_phases.4.**description**](vars/main.yml#L103)   | str | `Formats inspection output in JSON.` |    None  |  None |
+| [sysinspect_phases.4.**include_metadata**](vars/main.yml#L107)   | bool | `True` |    false  |  Include metadata |
+| [sysinspect_phases.4.**sanitize_keys**](vars/main.yml#L111)   | bool | `True` |    false  |  Sanitize keys |
+| [sysinspect_phases.**5**](vars/main.yml#L113)   | dict | `{}` |    None  |  None |
+| [sysinspect_phases.5.**id**](vars/main.yml#L113)   | str | `webhook_post` |    None  |  None |
+| [sysinspect_phases.5.**label**](vars/main.yml#L114)   | str | `Webhook Result Push` |    None  |  None |
+| [sysinspect_phases.5.**description**](vars/main.yml#L115)   | str | `Sends report to external endpoint if configured.` |    None  |  None |
+| [sysinspect_phases.5.**config**](vars/main.yml#L116)   | dict | `{}` |    None  |  None |
+| [sysinspect_phases.5.config.**enabled**](vars/main.yml#L120)   | bool | `True` |    true  |  Enable webhook |
+| [sysinspect_phases.5.config.**retry_count**](vars/main.yml#L124)   | int | `3` |    false  |  Retry count |
+| [sysinspect_phases.5.config.**timeout_seconds**](vars/main.yml#L128)   | int | `5` |    false  |  Timeout seconds |
+| [sysinspect_phases.5.config.**endpoint**](vars/main.yml#L132)   | str | `{{ sysinspect_webhook_url ¦ default('') }}` |    true  |  Webhook endpoint |
+| [sysinspect_tool_info](vars/main.yml#L138)   | dict | `{}` |    true  |  Internal tool metadata |
+| [sysinspect_tool_info.**name**](vars/main.yml#L139)   | str | `InspectorCoreShell` |    None  |  None |
+| [sysinspect_tool_info.**version**](vars/main.yml#L140)   | str | `2.0.1` |    None  |  None |
+| [sysinspect_tool_info.**license**](vars/main.yml#L141)   | str | `MIT-0` |    None  |  None |
 <details>
 <summary><b>🖇️ Full Descriptions for vars in vars/main.yml</b></summary>
 <br>
