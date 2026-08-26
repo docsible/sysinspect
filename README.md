@@ -157,68 +157,49 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
   
   
     
-      
-        
 
     - **myapp_food_kind**
-      - **Required**: false
-      - **Type**: 
+      - **Required**: False
+      - **Type**: str
       - **Default**: none
-      - **Description**: 
   
+      - **Description**: A string value with a limited list of allowed choices.
+  
+        - **Choices**:
+    
+            - vegetables
+    
+            - fruits
+    
+            - grains
+    
+            - meat
+    
   
   
   
 
     - **myapp_food_boiling_required**
-      - **Required**: false
-      - **Type**: 
-      - **Default**: none
-      - **Description**: 
+      - **Required**: False
+      - **Type**: bool
+      - **Default**: False
   
-  
-  
-  
-
-    - **myapp_food_preparation_time**
-      - **Required**: false
-      - **Type**: 
-      - **Default**: none
-      - **Description**: 
-  
-  
-  
-  
-
-
-      
-    
-      
-        
-
-    - **myapp_food_kind**
-      - **Required**: false
-      - **Type**: 
-      - **Default**: none
-      - **Description**: 
-  
+      - **Description**: Whether the kind of food requires boiling before consumption.
   
   
   
 
     - **myapp_food_preparation_time**
-      - **Required**: false
-      - **Type**: 
+      - **Required**: True
+      - **Type**: int
       - **Default**: none
-      - **Description**: 
   
+      - **Description**: Time to prepare a dish in minutes.
   
   
   
 
 
-      
-    
   
 
   - **myapp_dict_with_suboptions**
@@ -355,6 +336,7 @@ Description: Ansible role for collecting system metrics (CPU, memory, disk, OS, 
 | [sysinspect_collect_network](defaults/main.yml#L153)   | bool | `True` |    true  |  Collect network information (IP addresses) |
 | [sysinspect_cpu_alert_threshold](defaults/main.yml#L158)   | int | `90` |    false  |  CPU usage alert threshold |
 | [sysinspect_memory_alert_threshold](defaults/main.yml#L163)   | int | `90` |    false  |  Memory usage alert threshold |
+| [content](defaults/main.yml#L169)   | str | `<multiline value: literal>` |    false  |  Issue 132 |
 
 #### File: defaults/main/another_default_test.yml
 
@@ -407,6 +389,7 @@ including the final assembled JSON report before writing or sending it.<br></td>
 <tr><td><b>sysinspect_collect_network</b></td><td>Enable or disable network diagnostics.</td></tr>
 <tr><td><b>sysinspect_cpu_alert_threshold</b></td><td>If CPU usage exceeds this percentage, it will trigger an alert.</td></tr>
 <tr><td><b>sysinspect_memory_alert_threshold</b></td><td>If memory usage exceeds this percentage, it will trigger an alert.</td></tr>
+<tr><td><b>content</b></td><td>just testing</td></tr>
 </table>
 <br>
 </details>
