@@ -1,98 +1,174 @@
-name: Test Docsible PR and Generate Documentation
+name: Test Docsible and Generate Documentation
 
 on:
   workflow_dispatch:
     inputs:
+      docsible_branch:
+        description: "Optional: Branch name on docsible/docsible to test"
+        required: false
+        type: string
       docsible_pr_number:
         description: "Optional: Pull request number on docsible/docsible"
         required: false
         type: number
+      docsible_repo:
+        description: "Optional: Repository URL (default: https://github.com/docsible/docsible.git)"
+        required: false
+        default: "https://github.com/docsible/docsible.git"
+        type: string
       use_latest:
-        description: "Use latest main branch from docsible/docsible instead of a PR?"
+        description: "Use latest main branch from docsible/docsible instead of a branch/PR?"
         required: false
         default: false
         type: boolean
 
-permissions:
-  contents: write
+permissions: {}
 
 jobs:
-  test_docsible:
+  generate_docs:
+    name: Generate Documentation
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      has_changes: ${{ steps.check_diff.outputs.has_changes }}
+      commit_hash: ${{ steps.docsible_install.outputs.commit_hash }}
+      commit_msg: ${{ steps.docsible_install.outputs.commit_msg }}
+      version: ${{ steps.docsible_info.outputs.version }}
+      origin_label: ${{ steps.docsible_install.outputs.origin_label }}
 
     steps:
-      - name: Checkout current repository
-        uses: actions/checkout@v3
+      - name: Checkout target repository (read-only, no credentials stored)
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.ref_name }}
-
-      - name: Show current branch
-        run: echo "🟢 Running on branch - ${{ github.ref_name }}"
+          persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
+          cache: 'pip'
 
-      - name: Clone and install Docsible from PR or latest
+      - name: Validate inputs and install Docsible
+        id: docsible_install
+        env:
+          DOCSIBLE_REPO: ${{ inputs.docsible_repo || 'https://github.com/docsible/docsible.git' }}
+          DOCSIBLE_BRANCH: ${{ inputs.docsible_branch }}
+          DOCSIBLE_PR_NUMBER: ${{ inputs.docsible_pr_number }}
+          USE_LATEST: ${{ inputs.use_latest }}
         run: |
-          mkdir -p deps
-          cd deps
-          if [[ "${{ github.event.inputs.use_latest }}" == "true" ]]; then
-            echo "📦 Cloning latest Docsible from main"
-            git clone https://github.com/docsible/docsible.git
-            cd docsible
-            git checkout main
-            echo "origin_label=(latest)" >> $GITHUB_ENV
-          elif [[ -n "${{ github.event.inputs.docsible_pr_number }}" ]]; then
-            echo "📦 Fetching PR #${{ github.event.inputs.docsible_pr_number }}"
-            git clone https://github.com/docsible/docsible.git
-            cd docsible
-            git fetch origin pull/${{ github.event.inputs.docsible_pr_number }}/head:pr-${{ github.event.inputs.docsible_pr_number }}
-            git checkout pr-${{ github.event.inputs.docsible_pr_number }}
-            echo "origin_label=(PR #${{ github.event.inputs.docsible_pr_number }})" >> $GITHUB_ENV
-          else
-            echo "❌ Provide a PR number or enable 'use_latest'."
+          set -euo pipefail
+
+          # Validate repository URL
+          if [[ ! "${DOCSIBLE_REPO}" =~ ^https://github\.com/[a-zA-Z0-9._-]+/[a-zA-Z0-9._-]+(\.git)?$ ]]; then
+            echo "❌ Invalid repository URL: ${DOCSIBLE_REPO}"
             exit 1
           fi
 
-          echo "✅ Commit: $(git rev-parse --short HEAD) - $(git log -1 --pretty=%s)"
-          echo "commit=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-          echo "message=$(git log -1 --pretty=%s)" >> $GITHUB_ENV
+          mkdir -p deps
+          cd deps
+          git clone "${DOCSIBLE_REPO}" docsible
+          cd docsible
+
+          if [[ "${USE_LATEST}" == "true" ]]; then
+            echo "📦 Cloning latest Docsible from main"
+            git checkout main
+            ORIGIN_LABEL="(latest main)"
+          elif [[ -n "${DOCSIBLE_BRANCH}" ]]; then
+            if [[ ! "${DOCSIBLE_BRANCH}" =~ ^[a-zA-Z0-9._/-]+$ ]]; then
+              echo "❌ Invalid branch name: ${DOCSIBLE_BRANCH}"
+              exit 1
+            fi
+            echo "📦 Checking out branch: ${DOCSIBLE_BRANCH}"
+            git fetch origin "${DOCSIBLE_BRANCH}"
+            git checkout "${DOCSIBLE_BRANCH}"
+            ORIGIN_LABEL="(branch: ${DOCSIBLE_BRANCH})"
+          elif [[ -n "${DOCSIBLE_PR_NUMBER}" ]]; then
+            if [[ ! "${DOCSIBLE_PR_NUMBER}" =~ ^[0-9]+$ ]]; then
+              echo "❌ Invalid PR number: ${DOCSIBLE_PR_NUMBER}"
+              exit 1
+            fi
+            echo "📦 Fetching PR #${DOCSIBLE_PR_NUMBER}"
+            git fetch origin "pull/${DOCSIBLE_PR_NUMBER}/head:pr-${DOCSIBLE_PR_NUMBER}"
+            git checkout "pr-${DOCSIBLE_PR_NUMBER}"
+            ORIGIN_LABEL="(PR #${DOCSIBLE_PR_NUMBER})"
+          else
+            echo "❌ Provide a branch name, PR number, or enable 'use_latest'."
+            exit 1
+          fi
+
+          COMMIT_HASH=$(git rev-parse --short HEAD)
+          COMMIT_MSG=$(git log -1 --pretty=%s)
+          echo "✅ Commit: ${COMMIT_HASH} - ${COMMIT_MSG}"
+          echo "commit_hash=${COMMIT_HASH}" >> "$GITHUB_OUTPUT"
+          echo "commit_msg=${COMMIT_MSG}" >> "$GITHUB_OUTPUT"
+          echo "origin_label=${ORIGIN_LABEL}" >> "$GITHUB_OUTPUT"
 
           pip install .
-
 
       - name: Get Docsible version
         id: docsible_info
         run: |
           VERSION=$(docsible --version | sed -E 's/.*version ([0-9.]+)/\1/')
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "commit=${{ env.commit }}" >> $GITHUB_OUTPUT
-          echo "message=${{ env.message }}" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Generate documentation for role
         run: |
           docsible -r ./ -g -o README.md -com -nob
 
       - name: Check for documentation changes
+        id: check_diff
+        run: |
+          if git diff --exit-code README.md > /dev/null 2>&1; then
+            echo "✅ No documentation changes detected"
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "📝 Documentation changes detected"
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload generated README artifact
+        if: steps.check_diff.outputs.has_changes == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-readme
+          path: README.md
+          retention-days: 1
+
+  publish_docs:
+    name: Commit & Publish Documentation
+    needs: generate_docs
+    if: needs.generate_docs.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout current repository with write permissions
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Download generated README artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: generated-readme
+
+      - name: Commit and push changes
         env:
-          TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          DOCSIBLE_VERSION: ${{ needs.generate_docs.outputs.version }}
+          ORIGIN_LABEL: ${{ needs.generate_docs.outputs.origin_label }}
+          COMMIT_HASH: ${{ needs.generate_docs.outputs.commit_hash }}
+          COMMIT_MSG: ${{ needs.generate_docs.outputs.commit_msg }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add README.md
 
-          if git diff --cached --exit-code; then
-            echo "✅ No documentation changes to commit"
-          elif [ -n "${TOKEN}" ]; then
-            COMMIT_MSG="📘 update using docsible v${{ steps.docsible_info.outputs.version }} ${{ env.origin_label }}"
-            COMMIT_MSG+=" (commit: ${{ steps.docsible_info.outputs.commit }})"
-            COMMIT_MSG+=" - ${{ steps.docsible_info.outputs.message }}"
-            git commit -m "${COMMIT_MSG}"
-            BRANCH_NAME="main"
-            echo "🔁 Pushing changes back to branch: ${BRANCH_NAME}"
-            git push "https://${TOKEN}@github.com/docsible/sysinspect.git" HEAD:${BRANCH_NAME}
-          else
-            echo "⚠️ Skipping push: TOKEN is not set"
-          fi
+          MSG="📘 update using docsible v${DOCSIBLE_VERSION} ${ORIGIN_LABEL}"
+          MSG+=" (commit: ${COMMIT_HASH}) - ${COMMIT_MSG}"
+          git commit -m "${MSG}"
+
+          echo "🔁 Pushing changes back to branch: ${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
