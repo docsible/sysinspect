@@ -161,3 +161,19 @@ sysinspect_cpu_alert_threshold: 90  # %
 # required: false
 # description: If memory usage exceeds this percentage, it will trigger an alert.
 sysinspect_memory_alert_threshold: 90  # %
+
+
+# title: Issue 132
+# required: false
+# description: just testing
+content: |
+  {{
+    (
+      lookup(
+        'ansible.builtin.url',
+        'https://example.com'
+      )
+      | from_json
+    ).content
+    | b64decode
+  }}
